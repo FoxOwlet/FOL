@@ -1,5 +1,25 @@
 # FOL project
 
+FOL (FoxOwlet Language) - general purpose OOP/FP programming language made purely
+for the entertainment/educational reasons.
+
+## Project structure
+
+- fol-emulator - computer model (may be treated as a virtual machine for the FOL):
+memory model, CPU emulation, etc.
+- fol-ir - internal representation (syntax tree) of the FOL as well as parser implementation.
+- fol-interpreter - Java-based interpreter for the FOL.
+
+Upcoming:
+- fol-asm - assembly language model (FOAL - FoxOwlet Assembly Language). 
+Representation of the machine operations of the fol-emulator's CPU model.
+- fol-compiler - compiler from FOL to the machine code (fol-emulator commands).
+- fol-lsp - LSP server implementation for the FOL.
+
+## FOL grammar
+
+TBD
+
 ## Syntax example
 
 ```fol
