@@ -3,6 +3,9 @@
 FOL (FoxOwlet Language) - general purpose OOP/FP programming language made purely
 for the entertainment/educational reasons.
 
+Development process (in Ukrainian): [YouTube](https://www.youtube.com/playlist?list=PLVF003xr9wun6H0RipxlT2zjOHt1BmNts)
+
+
 ## Project structure
 
 - fol-emulator - computer model (may be treated as a virtual machine for the FOL):
