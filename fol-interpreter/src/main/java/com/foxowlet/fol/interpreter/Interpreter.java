@@ -3,13 +3,16 @@ package com.foxowlet.fol.interpreter;
 import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.emulator.memory.Memory;
+import com.foxowlet.fol.interpreter.exception.TypeException;
+import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
 import com.foxowlet.fol.interpreter.expression.*;
+import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.*;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Interpreter {
     private static final Map<Class<?>, ExpressionInterpreter<? extends Expression>> interpreterMap = new HashMap<>();
@@ -46,16 +49,7 @@ public class Interpreter {
     }
 
     private static void register(ExpressionInterpreter<? extends Expression> interpreter) {
-        if (interpreter.getClass().getGenericInterfaces()[0] instanceof ParameterizedType type) {
-            String typeName = type.getActualTypeArguments()[0].getTypeName();
-            try {
-                interpreterMap.put(Class.forName(typeName), interpreter);
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            }
-        } else {
-            throw new IllegalStateException("Can't infer type bound for " + interpreter);
-        }
+        interpreterMap.put(ReflectionUtils.expressionClass(interpreter), interpreter);
     }
 
     public final class Context {
@@ -78,11 +72,8 @@ public class Interpreter {
         }
 
         public Variable lookupVariable(String name) {
-            Variable variable = variableMap.get(name);
-            if (variable == null) {
-                throw new IllegalStateException("Undefined variable " + name);
-            }
-            return variable;
+            return Optional.of(variableMap.get(name))
+                    .orElseThrow(UndefinedSymbolException.prepare(name));
         }
 
         public Object interpret(Expression expression) {
@@ -90,15 +81,11 @@ public class Interpreter {
         }
 
         public <T> T interpret(Expression expression, Class<T> tClass) {
-            return tClass.cast(interpret(expression));
+            return ReflectionUtils.as(interpret(expression), tClass);
         }
 
         public <T> T interpret(Expression expression, Class<T> tClass, String errorMessage) {
-            Object obj = interpret(expression);
-            if (tClass.isInstance(obj)) {
-                return tClass.cast(obj);
-            }
-            throw new IllegalStateException(errorMessage + " " + obj);
+            return ReflectionUtils.as(interpret(expression), tClass, TypeException.prepare(errorMessage));
         }
     }
 }

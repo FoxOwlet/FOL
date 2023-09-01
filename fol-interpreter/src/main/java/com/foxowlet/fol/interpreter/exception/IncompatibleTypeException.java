@@ -1,7 +1,8 @@
 package com.foxowlet.fol.interpreter.exception;
 
-public class IncompatibleTypeException extends RuntimeException {
+public class IncompatibleTypeException extends InterpreterException {
     public IncompatibleTypeException(Object object, String type) {
-        super("Type %s of %s is incompatible with %s".formatted(object.getClass().getName(), object, type));
+        super(String.format("Type %s of %s is incompatible with %s",
+                object.getClass().getName(), object, type));
     }
 }

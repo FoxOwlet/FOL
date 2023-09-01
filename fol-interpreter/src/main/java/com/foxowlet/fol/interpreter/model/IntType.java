@@ -19,7 +19,7 @@ public class IntType implements Type {
             }
             return data;
         }
-        throw new IncompatibleTypeException(value, "integer");
+        throw new IncompatibleTypeException(value, "Int");
     }
 
     @Override

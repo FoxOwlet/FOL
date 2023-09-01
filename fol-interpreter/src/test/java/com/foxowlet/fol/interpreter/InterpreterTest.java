@@ -2,6 +2,7 @@ package com.foxowlet.fol.interpreter;
 
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.emulator.Emulator;
+import com.foxowlet.fol.interpreter.exception.InterpreterException;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.Variable;
 import org.junit.jupiter.api.Nested;
@@ -82,7 +83,7 @@ class InterpreterTest {
         void shouldThrowException_whenAssignmentTargetIsInvalid() {
             Assignment assignment = new Assignment(new IntLiteral(10), new IntLiteral(20));
 
-            assertThrows(Exception.class, () -> interpreter.interpret(assignment));
+            assertThrows(InterpreterException.class, () -> interpreter.interpret(assignment));
         }
     }
 

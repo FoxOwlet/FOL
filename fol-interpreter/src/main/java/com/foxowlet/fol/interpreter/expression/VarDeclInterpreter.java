@@ -8,7 +8,7 @@ public class VarDeclInterpreter implements ExpressionInterpreter<VarDecl> {
     @Override
     public Object interpret(VarDecl varDecl, Interpreter.Context context) {
         if (!varDecl.type().equals("Int")) {
-            throw new IllegalStateException("Unsupported type " + varDecl.type());
+            throw new UnsupportedOperationException("Only Int type is supported, got " + varDecl.type());
         }
         return context.makeVariable(varDecl.name().name(), new IntType());
     }
