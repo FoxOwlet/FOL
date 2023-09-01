@@ -1,5 +1,6 @@
 package com.foxowlet.fol.emulator;
 
+import com.foxowlet.fol.emulator.memory.PhysicalMemory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

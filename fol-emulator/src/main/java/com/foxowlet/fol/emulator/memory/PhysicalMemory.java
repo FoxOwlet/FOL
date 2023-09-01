@@ -1,4 +1,4 @@
-package com.foxowlet.fol.emulator;
+package com.foxowlet.fol.emulator.memory;
 
 public class PhysicalMemory implements Memory {
     private final byte[] memory;

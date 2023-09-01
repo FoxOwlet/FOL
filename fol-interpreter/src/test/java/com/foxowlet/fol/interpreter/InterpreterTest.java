@@ -1,8 +1,7 @@
 package com.foxowlet.fol.interpreter;
 
 import com.foxowlet.fol.ast.*;
-import com.foxowlet.fol.emulator.Memory;
-import com.foxowlet.fol.emulator.PhysicalMemory;
+import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.Variable;
 import org.junit.jupiter.api.Nested;
@@ -13,14 +12,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InterpreterTest {
-    private Interpreter interpreter = new Interpreter();
-    private Memory memory = new PhysicalMemory(100);
+    private Interpreter interpreter = new Interpreter(new Emulator(), 100);
 
     @Test
     void intLiteral_shouldBeConvertedIntoValue() {
         Expression literal = new IntLiteral(42);
 
-        Object actual = interpreter.interpret(memory, literal);
+        Object actual = interpreter.interpret(literal);
 
         assertValue(42, actual);
     }
@@ -29,7 +27,7 @@ class InterpreterTest {
     void varDecl_shouldAllocateVariable() {
         Expression varDecl = new VarDecl(new Symbol("foo"), "Int");
 
-        Object actual = interpreter.interpret(memory, varDecl);
+        Object actual = interpreter.interpret(varDecl);
 
         Variable variable = assertInstanceOf(Variable.class, actual);
         assertEquals("foo", variable.name());
@@ -41,7 +39,7 @@ class InterpreterTest {
                 new VarDecl(new Symbol("foo"), "Int"),
                 new IntLiteral(42));
 
-        Object actual = interpreter.interpret(memory, assignment);
+        Object actual = interpreter.interpret(assignment);
 
         assertValue(42, actual);
     }
@@ -59,7 +57,7 @@ class InterpreterTest {
         // { ... }
         Expression block = new Block(List.of(expr1, expr2));
 
-        Object actual = interpreter.interpret(memory, block);
+        Object actual = interpreter.interpret(block);
 
         assertValue(92, actual);
     }
@@ -70,21 +68,21 @@ class InterpreterTest {
         void shouldThrowException_whenVariableIsUndefined() {
             Symbol variable = new Symbol("foo");
 
-            assertThrows(Exception.class, () -> interpreter.interpret(memory, variable));
+            assertThrows(Exception.class, () -> interpreter.interpret(variable));
         }
 
         @Test
         void shouldThrowException_whenTypeIsUnresolved() {
             VarDecl varDecl = new VarDecl(new Symbol("foo"), "bar");
 
-            assertThrows(Exception.class, () -> interpreter.interpret(memory, varDecl));
+            assertThrows(Exception.class, () -> interpreter.interpret(varDecl));
         }
 
         @Test
         void shouldThrowException_whenAssignmentTargetIsInvalid() {
             Assignment assignment = new Assignment(new IntLiteral(10), new IntLiteral(20));
 
-            assertThrows(Exception.class, () -> interpreter.interpret(memory, assignment));
+            assertThrows(Exception.class, () -> interpreter.interpret(assignment));
         }
     }
 

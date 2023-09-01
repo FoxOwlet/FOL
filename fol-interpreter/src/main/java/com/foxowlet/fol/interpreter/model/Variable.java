@@ -1,6 +1,6 @@
 package com.foxowlet.fol.interpreter.model;
 
-import com.foxowlet.fol.emulator.Memory;
+import com.foxowlet.fol.emulator.memory.Memory;
 
 public record Variable(Memory memory, int address, String name, Type type) implements Value {
     @Override
