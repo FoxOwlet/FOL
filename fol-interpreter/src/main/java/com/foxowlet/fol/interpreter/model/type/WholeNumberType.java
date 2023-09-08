@@ -21,10 +21,9 @@ public abstract class WholeNumberType<T extends Number> implements Type {
         if (!javaClass.isInstance(value)) {
             throw new IncompatibleTypeException(value, folTypeName);
         }
-        int size = size();
-        long valBits = getBits(value, size);
-        byte[] data = new byte[size];
-        for (int i = size - 1; i >= 0; i--) {
+        long valBits = getBits(value);
+        byte[] data = new byte[size()];
+        for (int i = size() - 1; i >= 0; i--) {
             data[i] = (byte) (valBits & 0xff);
             valBits >>= 8;
         }
@@ -38,16 +37,20 @@ public abstract class WholeNumberType<T extends Number> implements Type {
             valBits <<= 8;
             valBits |= datum & 0xff;
         }
-        return getValue(valBits);
+        return getValue(valBits & bitMask());
     }
 
-    private long getBits(Object value, int size) {
+    private long getBits(Object value) {
         long longVal = javaClass.cast(value).longValue();
+        return longVal & bitMask();
+    }
+
+    private long bitMask() {
+        int size = size();
         if (size == Long.BYTES) {
-            return longVal;
+            return 0xFFFFFFFFFFFFFFFFL;
         }
-        long mask = (1L << size * 8) - 1; // <size> bytes all filled with "1"
-        return longVal & mask;
+        return (1L << size * 8) - 1; // <size> bytes all filled with "1"
     }
 
     protected abstract Object getValue(long valBits);

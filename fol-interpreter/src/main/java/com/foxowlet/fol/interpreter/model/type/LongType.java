@@ -1,7 +1,6 @@
 package com.foxowlet.fol.interpreter.model.type;
 
 public class LongType extends WholeNumberType<Long> {
-    private static final int SIZE_IN_BYTES = 8;
 
     public LongType() {
         super(Long.class, "Long");
@@ -9,7 +8,7 @@ public class LongType extends WholeNumberType<Long> {
 
     @Override
     public int size() {
-        return SIZE_IN_BYTES;
+        return Long.BYTES;
     }
 
     @Override
