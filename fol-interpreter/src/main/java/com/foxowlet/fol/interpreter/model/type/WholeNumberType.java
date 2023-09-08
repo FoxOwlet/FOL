@@ -1,6 +1,7 @@
 package com.foxowlet.fol.interpreter.model.type;
 
 import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
+import com.foxowlet.fol.interpreter.exception.InvalidTypeSizeException;
 
 public abstract class WholeNumberType<T extends Number> implements Type {
     private final Class<T> javaClass;
@@ -21,37 +22,27 @@ public abstract class WholeNumberType<T extends Number> implements Type {
         if (!javaClass.isInstance(value)) {
             throw new IncompatibleTypeException(value, folTypeName);
         }
-        long valBits = getBits(value);
+        long longVal = javaClass.cast(value).longValue();
         byte[] data = new byte[size()];
         for (int i = size() - 1; i >= 0; i--) {
-            data[i] = (byte) (valBits & 0xff);
-            valBits >>= 8;
+            data[i] = (byte) (longVal & 0xff);
+            longVal >>= 8;
         }
         return data;
     }
 
     @Override
     public Object decode(byte[] data) {
-        long valBits = 0;
+        if (data.length != size()) {
+            throw new InvalidTypeSizeException(size(), data.length);
+        }
+        long longVal = 0;
         for (byte datum : data) {
-            valBits <<= 8;
-            valBits |= datum & 0xff;
+            longVal <<= 8;
+            longVal |= datum & 0xff;
         }
-        return getValue(valBits & bitMask());
+        return getValue(longVal);
     }
 
-    private long getBits(Object value) {
-        long longVal = javaClass.cast(value).longValue();
-        return longVal & bitMask();
-    }
-
-    private long bitMask() {
-        int size = size();
-        if (size == Long.BYTES) {
-            return 0xFFFFFFFFFFFFFFFFL;
-        }
-        return (1L << size * 8) - 1; // <size> bytes all filled with "1"
-    }
-
-    protected abstract Object getValue(long valBits);
+    protected abstract Object getValue(long longVal);
 }

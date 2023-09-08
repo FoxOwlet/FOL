@@ -12,7 +12,7 @@ public class IntType extends WholeNumberType<Integer> {
     }
 
     @Override
-    protected Object getValue(long valBits) {
-        return (int) valBits;
+    protected Object getValue(long longVal) {
+        return (int) longVal;
     }
 }

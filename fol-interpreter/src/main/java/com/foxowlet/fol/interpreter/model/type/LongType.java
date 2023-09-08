@@ -12,7 +12,7 @@ public class LongType extends WholeNumberType<Long> {
     }
 
     @Override
-    protected Object getValue(long valBits) {
-        return valBits;
+    protected Object getValue(long longVal) {
+        return longVal;
     }
 }

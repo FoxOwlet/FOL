@@ -12,7 +12,7 @@ public class ByteType extends WholeNumberType<Byte> {
     }
 
     @Override
-    protected Object getValue(long valBits) {
-        return (byte) valBits;
+    protected Object getValue(long longVal) {
+        return (byte) longVal;
     }
 }
