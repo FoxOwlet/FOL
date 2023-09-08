@@ -8,6 +8,7 @@ import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
 import com.foxowlet.fol.interpreter.expression.*;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.*;
+import com.foxowlet.fol.interpreter.model.type.Type;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,4 +90,3 @@ public class Interpreter {
         }
     }
 }
-
