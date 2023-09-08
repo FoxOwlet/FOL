@@ -1,4 +1,4 @@
-package com.foxowlet.fol.emulator;
+package com.foxowlet.fol.emulator.memory;
 
 import org.junit.jupiter.api.Test;
 

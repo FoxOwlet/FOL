@@ -1,77 +1,96 @@
 package com.foxowlet.fol.interpreter;
 
-import com.foxowlet.fol.ast.Addition;
-import com.foxowlet.fol.ast.Assignment;
 import com.foxowlet.fol.ast.Expression;
-import com.foxowlet.fol.ast.IntLiteral;
-import com.foxowlet.fol.ast.Symbol;
-import com.foxowlet.fol.ast.VarDecl;
-import com.foxowlet.fol.ast.Block;
-import com.foxowlet.fol.emulator.Memory;
-import com.foxowlet.fol.interpreter.model.Container;
-import com.foxowlet.fol.interpreter.model.IntType;
-import com.foxowlet.fol.interpreter.model.Value;
-import com.foxowlet.fol.interpreter.model.Variable;
+import com.foxowlet.fol.emulator.Emulator;
+import com.foxowlet.fol.emulator.memory.Memory;
+import com.foxowlet.fol.interpreter.exception.DuplicateSymbolException;
+import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
+import com.foxowlet.fol.interpreter.expression.*;
+import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
+import com.foxowlet.fol.interpreter.model.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Interpreter {
-    private final Map<String, Variable> variableMap = new HashMap<>();
-    private int offset = 0;
+    private static final Map<Class<?>, ExpressionInterpreter<? extends Expression>> interpreterMap = new HashMap<>();
 
-    public Object interpret(Memory memory, Expression expression) {
-        switch (expression) {
-            case VarDecl(Symbol(String name), String type) -> {
-                if (!type.equals("Int")) {
-                    throw new IllegalStateException("Unsupported type " + type);
-                }
-                IntType varType = new IntType();
-                Variable variable = new Variable(memory, offset, name, varType);
-                variableMap.put(name, variable);
-                offset += varType.size();
-                return variable;
+    static {
+        List.of(
+                new VarDeclInterpreter(),
+                new SymbolInterpreter(),
+                new AssignmentInterpreter(),
+                new BlockInterpreter(),
+                new IntLiteralInterpreter(),
+                new AdditionInterpreter()
+        ).forEach(Interpreter::register);
+    }
+
+    private final InterpreterConfiguration config;
+    private final Memory memory;
+    private int offset;
+
+    public Interpreter(Emulator emulator) {
+        this(emulator, new InterpreterConfiguration());
+    }
+
+    public Interpreter(Emulator emulator, InterpreterConfiguration config) {
+        this.config = config;
+        this.memory = emulator.allocate(config.getMemoryLimit());
+        this.offset = 0;
+    }
+
+    public Object interpret(Expression expression) {
+        InterpretationContext context = new Context();
+        config.getPredefinedProcessor().preprocess(context);
+        return interpret(expression, context);
+    }
+
+    private Object interpret(Expression expression, InterpretationContext context) {
+        ExpressionInterpreter<? extends Expression> interpreter = interpreterMap.get(expression.getClass());
+        if (interpreter == null) {
+            throw new IllegalStateException("No interpreter defined for " + expression.getClass().getName());
+        }
+        return interpreter.interpretRaw(expression, context);
+    }
+
+    private static void register(ExpressionInterpreter<? extends Expression> interpreter) {
+        interpreterMap.put(ReflectionUtils.expressionClass(interpreter), interpreter);
+    }
+
+    public final class Context implements InterpretationContext {
+        private final Map<String, Object> symbolMap;
+
+        private Context() {
+            this.symbolMap = new HashMap<>();
+        }
+
+        @Override
+        public MemoryBlock allocateMemory(int amount) {
+            int address = offset;
+            offset += amount;
+            return new MemoryBlock(memory, address, amount);
+        }
+
+        @Override
+        public void registerSymbol(String name, Object value) {
+            if (symbolMap.containsKey(name)) {
+                throw new DuplicateSymbolException(name);
             }
-            case Assignment(Expression lhs, Expression rhs) -> {
-                Object target = interpret(memory, lhs);
-                if (target instanceof Variable var) {
-                    Object value = interpret(memory, rhs);
-                    if (value instanceof Value val) {
-                       var.write(val.value());
-                       return var;
-                    }
-                    throw new IllegalStateException("Invalid assignment source " + value);
-                }
-                throw new IllegalStateException("Invalid assignment target " + target);
-            }
-            case Symbol(String name) -> {
-                Variable variable = variableMap.get(name);
-                if (variable == null) {
-                    throw new IllegalStateException("Undefined variable " + name);
-                }
-                return variable;
-            }
-            case IntLiteral(int value) -> {
-                return new Container(value);
-            }
-            case Addition(Expression left, Expression right) -> {
-                Object leftObj = interpret(memory, left);
-                Object rightObj = interpret(memory, right);
-                if (leftObj instanceof Value leftVal) {
-                    if (rightObj instanceof Value rightVal) {
-                        return new Container((int) leftVal.value() + (int) rightVal.value());
-                    }
-                    throw new IllegalStateException("Invalid expression value " + leftObj);
-                }
-                throw new IllegalStateException("Invalid expression value " + rightObj);
-            }
-            case Block(var exprs) -> {
-                Object result = null;
-                for (Expression expr : exprs) {
-                    result = interpret(memory, expr);
-                }
-                return result;
-            }
+            symbolMap.put(name, value);
+        }
+
+        @Override
+        public Object lookupSymbol(String name) {
+            return Optional.ofNullable(symbolMap.get(name))
+                    .orElseThrow(UndefinedSymbolException.prepare(name));
+        }
+
+        @Override
+        public Object interpret(Expression expression) {
+            return Interpreter.this.interpret(expression, this);
         }
     }
 }
