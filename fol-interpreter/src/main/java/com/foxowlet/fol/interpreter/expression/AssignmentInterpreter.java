@@ -9,9 +9,9 @@ public class AssignmentInterpreter implements ExpressionInterpreter<Assignment> 
     @Override
     public Object interpret(Assignment expression, Interpreter.Context context) {
         Variable var = context.interpret(expression.lhs(), Variable.class,
-                "Invalid assigment source");
+                "Invalid assigment target");
         Value val = context.interpret(expression.rhs(), Value.class,
-                "Invalid assignment target");
+                "Invalid assignment source");
         var.write(val.value());
         return var;
     }
