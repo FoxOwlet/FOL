@@ -88,10 +88,9 @@ public class Interpreter {
             symbolMap.put(name, value);
         }
 
-        public <T> T lookup(String name, Class<T> tClass) {
-            Object symbol = Optional.of(symbolMap.get(name))
+        public Object lookup(String name) {
+            return Optional.ofNullable(symbolMap.get(name))
                     .orElseThrow(UndefinedSymbolException.prepare(name));
-            return ReflectionUtils.as(symbol, tClass, TypeException::new);
         }
 
         public Object interpret(Expression expression) {

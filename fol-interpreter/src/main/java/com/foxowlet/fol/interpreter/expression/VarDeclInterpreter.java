@@ -7,7 +7,7 @@ import com.foxowlet.fol.interpreter.model.type.Type;
 public class VarDeclInterpreter implements ExpressionInterpreter<VarDecl> {
     @Override
     public Object interpret(VarDecl varDecl, Interpreter.Context context) {
-        Type type = context.lookup(varDecl.type(), Type.class);
+        Type type = context.interpret(varDecl.type(), Type.class);
         return context.makeVariable(varDecl.name().name(), type);
     }
 }

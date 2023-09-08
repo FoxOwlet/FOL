@@ -7,6 +7,6 @@ import com.foxowlet.fol.interpreter.model.Variable;
 public class SymbolInterpreter implements ExpressionInterpreter<Symbol> {
     @Override
     public Object interpret(Symbol expression, Interpreter.Context context) {
-        return context.lookup(expression.name(), Variable.class);
+        return context.lookup(expression.name());
     }
 }
