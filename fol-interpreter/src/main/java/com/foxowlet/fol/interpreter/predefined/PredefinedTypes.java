@@ -1,5 +1,6 @@
 package com.foxowlet.fol.interpreter.predefined;
 
+import com.foxowlet.fol.interpreter.ContextPreprocessor;
 import com.foxowlet.fol.interpreter.Interpreter;
 import com.foxowlet.fol.interpreter.model.type.ByteType;
 import com.foxowlet.fol.interpreter.model.type.IntType;
@@ -8,7 +9,7 @@ import com.foxowlet.fol.interpreter.model.type.Type;
 
 import java.util.List;
 
-public class PredefinedTypes implements PredefinedProcessor {
+public class PredefinedTypes implements ContextPreprocessor {
     private final List<Type> predefinedTypes;
 
     public PredefinedTypes() {
@@ -20,7 +21,7 @@ public class PredefinedTypes implements PredefinedProcessor {
     }
 
     @Override
-    public void process(Interpreter.Context context) {
+    public void preprocess(Interpreter.Context context) {
         predefinedTypes.forEach(type -> context.registerSymbol(type.name(), type));
     }
 }

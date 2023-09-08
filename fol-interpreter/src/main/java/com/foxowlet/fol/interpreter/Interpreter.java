@@ -46,7 +46,7 @@ public class Interpreter {
 
     public Object interpret(Expression expression) {
         Context context = new Context();
-        config.getPredefinedProcessor().process(context);
+        config.getPredefinedProcessor().preprocess(context);
         return interpret(expression, context);
     }
 

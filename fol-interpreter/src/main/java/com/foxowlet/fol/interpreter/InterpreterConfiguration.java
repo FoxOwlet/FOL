@@ -1,17 +1,16 @@
 package com.foxowlet.fol.interpreter;
 
-import com.foxowlet.fol.interpreter.predefined.PredefinedChain;
-import com.foxowlet.fol.interpreter.predefined.PredefinedProcessor;
+import com.foxowlet.fol.interpreter.predefined.PredefinedPreprocessor;
 
 public class InterpreterConfiguration {
     private int memoryLimit = 1024;
-    private PredefinedProcessor predefinedProcessor = new PredefinedChain();
+    private ContextPreprocessor predefinedProcessor = new PredefinedPreprocessor();
 
     public int getMemoryLimit() {
         return memoryLimit;
     }
 
-    public PredefinedProcessor getPredefinedProcessor() {
+    public ContextPreprocessor getPredefinedProcessor() {
         return predefinedProcessor;
     }
 
@@ -20,7 +19,7 @@ public class InterpreterConfiguration {
         return this;
     }
 
-    public InterpreterConfiguration withPredefinedProcessor(PredefinedProcessor predefinedProcessor) {
+    public InterpreterConfiguration withPredefinedProcessor(ContextPreprocessor predefinedProcessor) {
         this.predefinedProcessor = predefinedProcessor;
         return this;
     }
