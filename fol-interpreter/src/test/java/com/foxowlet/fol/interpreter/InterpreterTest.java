@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InterpreterTest {
-    private Interpreter interpreter = new Interpreter(new Emulator(), 100);
+    private final Interpreter interpreter = new Interpreter(new Emulator());
 
     @Test
     void intLiteral_shouldBeConvertedIntoValue() {
@@ -26,7 +26,7 @@ class InterpreterTest {
 
     @Test
     void varDecl_shouldAllocateVariable() {
-        Expression varDecl = new VarDecl(new Symbol("foo"), "Int");
+        Expression varDecl = new VarDecl(new Symbol("foo"), "Long");
 
         Object actual = interpreter.interpret(varDecl);
 

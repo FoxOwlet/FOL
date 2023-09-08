@@ -3,6 +3,7 @@ package com.foxowlet.fol.interpreter;
 import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.emulator.memory.Memory;
+import com.foxowlet.fol.interpreter.exception.DuplicateSymbolException;
 import com.foxowlet.fol.interpreter.exception.TypeException;
 import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
 import com.foxowlet.fol.interpreter.expression.*;
@@ -29,16 +30,24 @@ public class Interpreter {
         ).forEach(Interpreter::register);
     }
 
+    private final InterpreterConfiguration config;
     private final Memory memory;
     private int offset;
 
-    public Interpreter(Emulator emulator, int memoryLimit) {
-        memory = emulator.allocate(memoryLimit);
-        offset = 0;
+    public Interpreter(Emulator emulator) {
+        this(emulator, new InterpreterConfiguration());
+    }
+
+    public Interpreter(Emulator emulator, InterpreterConfiguration config) {
+        this.config = config;
+        this.memory = emulator.allocate(config.getMemoryLimit());
+        this.offset = 0;
     }
 
     public Object interpret(Expression expression) {
-        return interpret(expression, new Context());
+        Context context = new Context();
+        config.getPredefinedProcessor().process(context);
+        return interpret(expression, context);
     }
 
     private Object interpret(Expression expression, Context context) {
@@ -54,10 +63,10 @@ public class Interpreter {
     }
 
     public final class Context {
-        private final Map<String, Variable> variableMap;
+        private final Map<String, Object> symbolMap;
 
         private Context() {
-            this.variableMap = new HashMap<>();
+            this.symbolMap = new HashMap<>();
         }
 
         public int allocateMemory(int amount) {
@@ -68,13 +77,21 @@ public class Interpreter {
 
         public Variable makeVariable(String name, Type type) {
             Variable variable = new Variable(memory, allocateMemory(type.size()), name, type);
-            variableMap.put(name, variable);
+            registerSymbol(name, variable);
             return variable;
         }
 
-        public Variable lookupVariable(String name) {
-            return Optional.of(variableMap.get(name))
+        public void registerSymbol(String name, Object value) {
+            if (symbolMap.containsKey(name)) {
+                throw new DuplicateSymbolException(name);
+            }
+            symbolMap.put(name, value);
+        }
+
+        public <T> T lookup(String name, Class<T> tClass) {
+            Object symbol = Optional.of(symbolMap.get(name))
                     .orElseThrow(UndefinedSymbolException.prepare(name));
+            return ReflectionUtils.as(symbol, tClass, TypeException::new);
         }
 
         public Object interpret(Expression expression) {

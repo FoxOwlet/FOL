@@ -12,6 +12,11 @@ public abstract class WholeNumberType<T extends Number> implements Type {
     }
 
     @Override
+    public String name() {
+        return folTypeName;
+    }
+
+    @Override
     public byte[] encode(Object value) {
         if (!javaClass.isInstance(value)) {
             throw new IncompatibleTypeException(value, folTypeName);
