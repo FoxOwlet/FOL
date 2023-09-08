@@ -9,7 +9,7 @@ import com.foxowlet.fol.ast.VarDecl;
 import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.emulator.Memory;
 import com.foxowlet.fol.interpreter.model.Container;
-import com.foxowlet.fol.interpreter.model.IntType;
+import com.foxowlet.fol.interpreter.model.type.IntType;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.Variable;
 
