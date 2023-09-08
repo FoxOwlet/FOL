@@ -11,7 +11,7 @@ public class VarDeclInterpreter implements ExpressionInterpreter<VarDecl> {
     public Object interpret(VarDecl varDecl, InterpretationContext context) {
         Type type = context.interpret(varDecl.type(), Type.class);
         MemoryLocation memory = context.allocateMemory(type.size());
-        String varName = varDecl.name().name();
+        String varName = varDecl.variable().name();
         Variable variable = new Variable(memory, varName, type);
         context.registerSymbol(varName, variable);
         return variable;
