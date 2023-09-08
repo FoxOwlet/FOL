@@ -1,7 +1,7 @@
 package com.foxowlet.fol.interpreter.predefined;
 
 import com.foxowlet.fol.interpreter.ContextPreprocessor;
-import com.foxowlet.fol.interpreter.Interpreter;
+import com.foxowlet.fol.interpreter.InterpretationContext;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class PredefinedPreprocessor implements ContextPreprocessor {
     }
 
     @Override
-    public void preprocess(Interpreter.Context context) {
+    public void preprocess(InterpretationContext context) {
         processors.forEach(processor -> processor.preprocess(context));
     }
 }
