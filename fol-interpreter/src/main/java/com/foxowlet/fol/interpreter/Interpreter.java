@@ -24,7 +24,9 @@ public class Interpreter {
                 new AssignmentInterpreter(),
                 new BlockInterpreter(),
                 new IntLiteralInterpreter(),
-                new AdditionInterpreter()
+                new AdditionInterpreter(),
+                new LambdaInterpreter(),
+                new FunctionCallInterpreter()
         ).forEach(Interpreter::register);
     }
 
@@ -62,9 +64,11 @@ public class Interpreter {
 
     public final class Context implements InterpretationContext {
         private final Map<String, Object> symbolMap;
+        private int functionId;
 
         private Context() {
             this.symbolMap = new HashMap<>();
+            this.functionId = 0;
         }
 
         @Override
@@ -91,6 +95,11 @@ public class Interpreter {
         @Override
         public Object interpret(Expression expression) {
             return Interpreter.this.interpret(expression, this);
+        }
+
+        @Override
+        public int allocateFunction() {
+            return ++functionId;
         }
     }
 }

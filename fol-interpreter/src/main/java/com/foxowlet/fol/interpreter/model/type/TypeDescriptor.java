@@ -1,6 +1,6 @@
 package com.foxowlet.fol.interpreter.model.type;
 
-public interface Type {
+public interface TypeDescriptor {
     String name();
     int size();
     byte[] encode(Object value);

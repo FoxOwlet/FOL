@@ -21,4 +21,6 @@ public interface InterpretationContext {
     default <T> T interpret(Expression expression, Class<T> tClass, String errorMessage) {
         return ReflectionUtils.as(interpret(expression), tClass, TypeException.prepare(errorMessage));
     }
+
+    int allocateFunction();
 }

@@ -3,7 +3,7 @@ package com.foxowlet.fol.interpreter.model.type;
 import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.exception.InvalidTypeSizeException;
 
-public abstract class WholeNumberType<T extends Number> implements Type {
+public abstract class WholeNumberType<T extends Number> implements TypeDescriptor {
     private final Class<T> javaClass;
     private final String folTypeName;
 
