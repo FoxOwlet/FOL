@@ -26,7 +26,8 @@ public class Interpreter {
                 new IntLiteralInterpreter(),
                 new AdditionInterpreter(),
                 new LambdaInterpreter(),
-                new FunctionCallInterpreter()
+                new FunctionCallInterpreter(),
+                new FunctionDeclInterpreter()
         ).forEach(Interpreter::register);
     }
 

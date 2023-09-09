@@ -1,9 +1,13 @@
 package com.foxowlet.fol.interpreter.model.type;
 
+import java.util.Objects;
+
 public class UnitType implements TypeDescriptor {
+    private static final String NAME = "Unit";
+
     @Override
     public String name() {
-        return "Unit";
+        return NAME;
     }
 
     @Override
@@ -19,5 +23,16 @@ public class UnitType implements TypeDescriptor {
     @Override
     public Object decode(byte[] data) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        return object != null && getClass() == object.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(NAME);
     }
 }

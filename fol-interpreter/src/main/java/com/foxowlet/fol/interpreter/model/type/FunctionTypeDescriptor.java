@@ -4,6 +4,8 @@ import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Function;
 
+import java.util.Objects;
+
 public class FunctionTypeDescriptor implements TypeDescriptor {
     private final IntType idType;
     private final InterpretationContext context;
@@ -15,6 +17,14 @@ public class FunctionTypeDescriptor implements TypeDescriptor {
         this.argumentType = argumentType;
         this.returnType = returnType;
         this.idType = new IntType();
+    }
+
+    public TypeDescriptor argumentType() {
+        return argumentType;
+    }
+
+    public TypeDescriptor returnType() {
+        return returnType;
     }
 
     @Override
@@ -35,5 +45,18 @@ public class FunctionTypeDescriptor implements TypeDescriptor {
     @Override
     public Object decode(byte[] data) {
         return context.lookupSymbol(String.valueOf(idType.decode(data)));
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        FunctionTypeDescriptor that = (FunctionTypeDescriptor) object;
+        return Objects.equals(argumentType, that.argumentType) && Objects.equals(returnType, that.returnType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(argumentType, returnType);
     }
 }

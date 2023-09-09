@@ -3,6 +3,8 @@ package com.foxowlet.fol.interpreter.model.type;
 import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.exception.InvalidTypeSizeException;
 
+import java.util.Objects;
+
 public abstract class WholeNumberType<T extends Number> implements TypeDescriptor {
     private final Class<T> javaClass;
     private final String folTypeName;
@@ -45,4 +47,18 @@ public abstract class WholeNumberType<T extends Number> implements TypeDescripto
     }
 
     protected abstract Object getValue(long longVal);
+
+    // TODO: use singletons at least for predefined types?
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        WholeNumberType<?> that = (WholeNumberType<?>) object;
+        return Objects.equals(folTypeName, that.folTypeName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(folTypeName);
+    }
 }
