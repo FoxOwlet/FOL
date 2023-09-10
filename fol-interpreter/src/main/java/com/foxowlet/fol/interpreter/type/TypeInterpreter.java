@@ -13,7 +13,7 @@ public class TypeInterpreter {
             case ScalarType scalar ->
                     context.interpret(scalar.symbol(), TypeDescriptor.class);
             case FunctionType(Type argumentType, Type returnType) ->
-                new FunctionTypeDescriptor(context, interpret(argumentType, context), interpret(returnType, context));
+                    new FunctionTypeDescriptor(context, interpret(argumentType, context), interpret(returnType, context));
         };
     }
 }

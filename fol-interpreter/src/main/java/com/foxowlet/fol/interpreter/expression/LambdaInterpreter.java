@@ -25,9 +25,7 @@ public class LambdaInterpreter implements ExpressionInterpreter<Lambda> {
         return function;
     }
 
-    private List<FunctionParameter> convertParams(
-            List<FormalParameter> params,
-            InterpretationContext context) {
+    private List<FunctionParameter> convertParams(List<FormalParameter> params, InterpretationContext context) {
         return params.stream()
                 .map(param -> convertParam(context, param))
                 .toList();
