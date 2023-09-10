@@ -2,7 +2,6 @@ package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.InterpretationContext;
-import com.foxowlet.fol.interpreter.model.Variable;
 
 public class FunctionDeclInterpreter implements ExpressionInterpreter<FunctionDecl> {
     @Override
@@ -11,13 +10,7 @@ public class FunctionDeclInterpreter implements ExpressionInterpreter<FunctionDe
         Type type = createType(expression);
         VarDecl functionSymbol = new VarDecl(expression.name(), type);
         Assignment binding = new Assignment(functionSymbol, lambda);
-        // Technically, we don't need an exact class here
-        // But perform cast to ensure that assignment returns variable
-        // So we will fail fast in the implementation changes
-        // Yeah, hidden coupling ¯\_(ツ)_/¯
-        // But otherwise we will need to duplicate LambdaInterpreter logic here
-        // TODO: try to rework this (possibly by extracting lambda interpretation logic somewhere)
-        return context.interpret(binding, Variable.class);
+        return context.interpret(binding);
     }
 
     private Type createType(FunctionDecl expression) {

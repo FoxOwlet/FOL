@@ -7,8 +7,20 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class LambdaInterpreterTest extends AbstractInterpreterTest {
+    @Test
+    void shouldInterpretAsFunction() {
+        Block body = new Block(List.of(new IntLiteral(42)));
+        Lambda lambda = new Lambda(List.of(), body);
+
+        Object actual = interpret(lambda);
+
+        assertEquals(new Function(1, List.of(), body), actual);
+    }
+
     @Test
     void shouldAssignFunctionToVariable() {
         ScalarType argumentType = new ScalarType(new Symbol("Unit"));
