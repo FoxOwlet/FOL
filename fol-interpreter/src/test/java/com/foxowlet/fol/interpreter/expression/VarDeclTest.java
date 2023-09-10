@@ -1,6 +1,7 @@
 package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.Expression;
+import com.foxowlet.fol.ast.ScalarType;
 import com.foxowlet.fol.ast.Symbol;
 import com.foxowlet.fol.ast.VarDecl;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
@@ -14,7 +15,7 @@ class VarDeclTest extends AbstractInterpreterTest {
 
     @Test
     void shouldAllocateVariable() {
-        Expression varDecl = new VarDecl(new Symbol("foo"), new Symbol("Long"));
+        Expression varDecl = new VarDecl(new Symbol("foo"), new ScalarType(new Symbol("Long")));
 
         Object actual = interpret(varDecl);
 
@@ -24,7 +25,7 @@ class VarDeclTest extends AbstractInterpreterTest {
 
     @Test
     void shouldThrowException_whenTypeIsUnresolved() {
-        VarDecl varDecl = new VarDecl(new Symbol("foo"), new Symbol("bar"));
+        VarDecl varDecl = new VarDecl(new Symbol("foo"), new ScalarType(new Symbol("bar")));
 
         assertThrows(InterpreterException.class, () -> interpret(varDecl));
     }

@@ -1,8 +1,8 @@
 package com.foxowlet.fol.interpreter.model;
 
-import com.foxowlet.fol.interpreter.model.type.Type;
+import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
-public record Variable(MemoryLocation memory, String name, Type type) implements Value {
+public record Variable(MemoryLocation memory, String name, TypeDescriptor type) implements Value {
     @Override
     public Object value() {
         byte[] data = new byte[type.size()];

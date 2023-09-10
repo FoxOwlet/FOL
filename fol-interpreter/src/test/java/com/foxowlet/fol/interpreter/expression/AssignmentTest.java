@@ -12,7 +12,7 @@ class AssignmentTest extends AbstractInterpreterTest {
     @Test
     void shouldReturnAssignedValue() {
         Expression assignment = new Assignment(
-                new VarDecl(new Symbol("foo"), new Symbol("Int")),
+                new VarDecl(new Symbol("foo"), new ScalarType(new Symbol("Int"))),
                 new IntLiteral(42));
 
         Object actual = interpret(assignment);
