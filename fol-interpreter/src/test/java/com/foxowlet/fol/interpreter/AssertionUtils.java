@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 public final class AssertionUtils {
     private AssertionUtils() {}
 
-    public static <T> void assertValue(T expected, Object value) {
-        assertInstanceOf(Value.class, value);
-        assertEquals(expected, ((Value) value).value());
+    public static <T> void assertValue(T expected, Object actual) {
+        Value value = assertInstanceOf(Value.class, actual);
+        assertEquals(expected, value.value());
     }
 
     public static void assertFunctionType(Variable function, TypeDescriptor... parts) {
