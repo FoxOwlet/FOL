@@ -5,6 +5,7 @@ import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import com.foxowlet.fol.interpreter.exception.InterpreterException;
 import org.junit.jupiter.api.Test;
 
+import static com.foxowlet.fol.interpreter.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AssignmentTest extends AbstractInterpreterTest {
@@ -12,7 +13,7 @@ class AssignmentTest extends AbstractInterpreterTest {
     @Test
     void shouldReturnAssignedValue() {
         Expression assignment = new Assignment(
-                new VarDecl(new Symbol("foo"), new ScalarType(new Symbol("Int"))),
+                var("foo", "Int"),
                 new IntLiteral(42));
 
         Object actual = interpret(assignment);

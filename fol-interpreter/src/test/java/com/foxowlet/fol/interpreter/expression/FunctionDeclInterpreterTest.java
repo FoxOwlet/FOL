@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.foxowlet.fol.interpreter.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
     @Test
     void shouldCreateBoundSymbol() {
-        Block body = new Block(List.of());
-        ScalarType returnType = new ScalarType(new Symbol("Unit"));
+        Block body = block();
         // def foo(): Unit {}
-        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), List.of(), returnType, body);
+        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), List.of(), type("Unit"), body);
 
         Object actual = interpret(foo);
 
@@ -26,10 +26,9 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldComputeProperType_whenNoArgs() {
-        Block body = new Block(List.of(new IntLiteral(42)));
-        ScalarType returnType = new ScalarType(new Symbol("Int"));
+        Block body = block(new IntLiteral(42));
         // def foo(): Int { 42 }
-        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), List.of(), returnType, body);
+        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), List.of(), type("Int"), body);
 
         Object actual = interpret(foo);
 
@@ -40,13 +39,12 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
     @Test
     void shouldComputeProperType_whenMultipleArgs() {
         Block body = new Block(List.of());
-        ScalarType returnType = new ScalarType(new Symbol("Unit"));
         List<FormalParameter> params = List.of(
-                new FormalParameter(new Symbol("a"), new ScalarType(new Symbol("Long"))),
-                new FormalParameter(new Symbol("b"), new ScalarType(new Symbol("Byte")))
+                new FormalParameter(new Symbol("a"), type("Long")),
+                new FormalParameter(new Symbol("b"), type("Byte"))
         );
         // def foo(a: Long, b: Byte): Unit {}
-        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), params, returnType, body);
+        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), params, type("Unit"), body);
 
         Object actual = interpret(foo);
 
