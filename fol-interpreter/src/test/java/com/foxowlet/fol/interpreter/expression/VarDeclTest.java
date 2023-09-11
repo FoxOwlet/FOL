@@ -5,9 +5,10 @@ import com.foxowlet.fol.ast.VarDecl;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import com.foxowlet.fol.interpreter.exception.InterpreterException;
 import com.foxowlet.fol.interpreter.model.Variable;
+import com.foxowlet.fol.interpreter.model.type.LongType;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.TestUtils.var;
+import static com.foxowlet.fol.interpreter.AstUtils.var;
 import static org.junit.jupiter.api.Assertions.*;
 
 class VarDeclTest extends AbstractInterpreterTest {
@@ -20,6 +21,7 @@ class VarDeclTest extends AbstractInterpreterTest {
 
         Variable variable = assertInstanceOf(Variable.class, actual);
         assertEquals("foo", variable.name());
+        assertEquals(new LongType(), variable.type());
     }
 
     @Test

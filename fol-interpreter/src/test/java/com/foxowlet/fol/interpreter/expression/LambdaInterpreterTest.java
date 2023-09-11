@@ -7,15 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.foxowlet.fol.interpreter.TestUtils.*;
+import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
+import static com.foxowlet.fol.interpreter.AstUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class LambdaInterpreterTest extends AbstractInterpreterTest {
     @Test
     void shouldInterpretAsFunction() {
-        Block body = block(new IntLiteral(42));
-        Lambda lambda = new Lambda(List.of(), body);
+        Block body = block(literal(42));
+        Lambda lambda = lambda(body);
 
         Object actual = interpret(lambda);
 
@@ -24,10 +25,10 @@ class LambdaInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldAssignFunctionToVariable() {
-        VarDecl var = var("foo", ftype("Unit", "Int"));
-        Block body = block(new IntLiteral(42));
-        Lambda lambda = new Lambda(List.of(), body);
-        Assignment assignment = new Assignment(var, lambda);
+        Block body = block(literal(42));
+        Assignment assignment = new Assignment(
+                var("foo", ftype("Unit", "Int")),
+                lambda(body));
 
         Object actual = interpret(assignment);
 

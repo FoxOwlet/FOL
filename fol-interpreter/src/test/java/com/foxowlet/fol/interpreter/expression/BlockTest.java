@@ -4,7 +4,8 @@ import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.TestUtils.*;
+import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
+import static com.foxowlet.fol.interpreter.AstUtils.*;
 
 class BlockTest extends AbstractInterpreterTest {
 
@@ -13,11 +14,11 @@ class BlockTest extends AbstractInterpreterTest {
         // var i: Int = 40 + 42
         Expression expr1 = new Assignment(
                 var("i", "Int"),
-                new Addition(new IntLiteral(40), new IntLiteral(42)));
+                new Addition(literal(40), literal(42)));
         // var j: Int = i + 10;
         Expression expr2 = new Assignment(
                 var("j", "Int"),
-                new Addition(new Symbol("i"), new IntLiteral(10)));
+                new Addition(new Symbol("i"), literal(10)));
         // { ... }
         Expression block = block(expr1, expr2);
 

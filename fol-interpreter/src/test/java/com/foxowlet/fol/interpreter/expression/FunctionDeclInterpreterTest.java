@@ -1,15 +1,21 @@
 package com.foxowlet.fol.interpreter.expression;
 
-import com.foxowlet.fol.ast.*;
+import com.foxowlet.fol.ast.Block;
+import com.foxowlet.fol.ast.FunctionDecl;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import com.foxowlet.fol.interpreter.model.Function;
 import com.foxowlet.fol.interpreter.model.Variable;
-import com.foxowlet.fol.interpreter.model.type.*;
+import com.foxowlet.fol.interpreter.model.type.ByteType;
+import com.foxowlet.fol.interpreter.model.type.IntType;
+import com.foxowlet.fol.interpreter.model.type.LongType;
+import com.foxowlet.fol.interpreter.model.type.UnitType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.foxowlet.fol.interpreter.TestUtils.*;
+import static com.foxowlet.fol.interpreter.AssertionUtils.assertFunctionType;
+import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
+import static com.foxowlet.fol.interpreter.AstUtils.*;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
@@ -17,7 +23,7 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
     void shouldCreateBoundSymbol() {
         Block body = block();
         // def foo(): Unit {}
-        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), List.of(), type("Unit"), body);
+        FunctionDecl foo = fdecl("foo", "Unit", body);
 
         Object actual = interpret(foo);
 
@@ -26,9 +32,9 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldComputeProperType_whenNoArgs() {
-        Block body = block(new IntLiteral(42));
+        Block body = block(literal(42));
         // def foo(): Int { 42 }
-        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), List.of(), type("Int"), body);
+        FunctionDecl foo = fdecl("foo", "Int", body);
 
         Object actual = interpret(foo);
 
@@ -38,13 +44,10 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldComputeProperType_whenMultipleArgs() {
-        Block body = new Block(List.of());
-        List<FormalParameter> params = List.of(
-                new FormalParameter(new Symbol("a"), type("Long")),
-                new FormalParameter(new Symbol("b"), type("Byte"))
-        );
         // def foo(a: Long, b: Byte): Unit {}
-        FunctionDecl foo = new FunctionDecl(new Symbol("foo"), params, type("Unit"), body);
+        FunctionDecl foo = fdecl("foo", "Unit", block(),
+                formal("a", "Long"),
+                formal("b", "Byte"));
 
         Object actual = interpret(foo);
 

@@ -1,4 +1,5 @@
 package com.foxowlet.fol.ast;
 
-public sealed interface Literal extends Expression permits IntLiteral {
+public sealed interface Literal extends Expression
+        permits IntLiteral, LongLiteral, ByteLiteral {
 }
