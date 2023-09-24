@@ -25,7 +25,6 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
         assertValue(42, actual);
     }
 
-
     @Test
     void shouldCallFunction_whenCalledInplace() {
         // #(){ 42 }()
@@ -34,5 +33,62 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
         Object actual = interpret(functionCall);
 
         assertValue(42, actual);
+    }
+
+    @Test
+    void shouldCallFunction_whenHasSingleArgument() {
+        // #(a: Int){ a }
+        Lambda lambda = lambda(block(new Symbol("a")), formal("a", "Int"));
+        // #(a: Int){ a }(42)
+        FunctionCall functionCall = call(lambda, literal(42));
+
+        Object actual = interpret(functionCall);
+
+        assertValue(42, actual);
+    }
+
+    @Test
+    void shouldCallFunction_whenHasMultipleArguments() {
+        // #(a: Int, b: Int){ a + b }
+        Lambda lambda = lambda(block(new Addition(new Symbol("a"), new Symbol("b"))),
+                formal("a", "Int"), formal("b", "Int"));
+        // ...(40, 2)
+        FunctionCall functionCall = call(lambda, literal(40), literal(2));
+
+        Object actual = interpret(functionCall);
+
+        assertValue(42, actual);
+    }
+
+    @Test
+    void shouldReturnValue_whenFunctionHasShadowVariable() {
+        // #(a: Int){ var a: Int = a + 2; a }
+        Lambda lambda = lambda(block(new Assignment(
+                                var("a", "Int"),
+                                new Addition(new Symbol("a"), literal(2))),
+                        new Symbol("a")),
+                formal("a", "Int"));
+        // ...(40)
+        FunctionCall functionCall = call(lambda, literal(40));
+
+        Object actual = interpret(functionCall);
+
+        assertValue(42, actual);
+    }
+
+    @Test
+    void shouldThrowException_whenArgumentUsedOutsideOfFunctionScope() {
+        // #(a: Int){ a }
+        Lambda lambda = lambda(block(new Symbol("a")), formal("a", "Int"));
+        // #(a: Int){ a }(42)
+        FunctionCall functionCall = call(lambda, literal(42));
+        Symbol var = new Symbol("a");
+        // {
+        //   #(a: Int){ a }(42)
+        //   a
+        // }
+        Block block = block(functionCall, var);
+
+        assertError(block);
     }
 }
