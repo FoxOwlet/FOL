@@ -8,6 +8,10 @@ import com.foxowlet.fol.interpreter.model.MemoryBlock;
 public interface InterpretationContext {
     MemoryBlock allocateMemory(int amount);
 
+    void enterScope();
+
+    void exitScope();
+
     void registerSymbol(String name, Object value);
 
     Object lookupSymbol(String name);
