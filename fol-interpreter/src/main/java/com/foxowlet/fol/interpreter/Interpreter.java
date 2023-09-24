@@ -3,16 +3,14 @@ package com.foxowlet.fol.interpreter;
 import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.emulator.memory.Memory;
-import com.foxowlet.fol.interpreter.exception.DuplicateSymbolException;
-import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
 import com.foxowlet.fol.interpreter.expression.*;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
-import com.foxowlet.fol.interpreter.model.*;
+import com.foxowlet.fol.interpreter.model.MemoryBlock;
+import com.foxowlet.fol.interpreter.scope.LookupScope;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class Interpreter {
     private static final Map<Class<?>, ExpressionInterpreter<? extends Expression>> interpreterMap = new HashMap<>();
@@ -64,11 +62,11 @@ public class Interpreter {
     }
 
     public final class Context implements InterpretationContext {
-        private final Map<String, Object> symbolMap;
+        private final LookupScope lookupScope;
         private int functionId;
 
         private Context() {
-            this.symbolMap = new HashMap<>();
+            this.lookupScope = new LookupScope();
             this.functionId = 0;
         }
 
@@ -80,17 +78,23 @@ public class Interpreter {
         }
 
         @Override
+        public void enterScope() {
+            lookupScope.enterScope();
+        }
+
+        @Override
+        public void exitScope() {
+            lookupScope.exitScope();
+        }
+
+        @Override
         public void registerSymbol(String name, Object value) {
-            if (symbolMap.containsKey(name)) {
-                throw new DuplicateSymbolException(name);
-            }
-            symbolMap.put(name, value);
+            lookupScope.registerSymbol(name, value);
         }
 
         @Override
         public Object lookupSymbol(String name) {
-            return Optional.ofNullable(symbolMap.get(name))
-                    .orElseThrow(UndefinedSymbolException.prepare(name));
+            return lookupScope.lookupSymbol(name);
         }
 
         @Override
