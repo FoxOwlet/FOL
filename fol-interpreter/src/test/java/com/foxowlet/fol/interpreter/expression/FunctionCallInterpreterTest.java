@@ -63,9 +63,8 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
     @Test
     void shouldReturnValue_whenFunctionHasShadowVariable() {
         // #(a: Int){ var a: Int = a + 2; a }
-        Lambda lambda = lambda(block(new Assignment(
-                                var("a", "Int"),
-                                new Addition(new Symbol("a"), literal(2))),
+        Lambda lambda = lambda(block(
+                        var("a", "Int", new Addition(new Symbol("a"), literal(2))),
                         new Symbol("a")),
                 formal("a", "Int"));
         // ...(40)

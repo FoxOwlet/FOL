@@ -11,13 +11,13 @@ import static com.foxowlet.fol.interpreter.AstUtils.*;
 public class VisibilityScopeTest extends AbstractInterpreterTest {
     @Test
     void shouldResolveShadowVariables() {
-        Block inner = block(new Assignment(var("a", "Int"), literal(42)));
+        Block inner = block(var("a", "Int", literal(42)));
         // {
         //    var a: Int = 10
         //    { var a: Int = 42 }
         // }
         Block outer = block(
-                new Assignment(var("a", "Int"), literal(10)),
+                var("a", "Int", literal(10)),
                 inner);
 
         assertValue(42, interpret(outer));
@@ -26,14 +26,13 @@ public class VisibilityScopeTest extends AbstractInterpreterTest {
     @Test
     void shouldAllowOuterVariableUsage_whenShadowing() {
         Block inner = block(
-                new Assignment(var("a", "Int"),
-                new Addition(new Symbol("a"), literal(2))));
+                var("a", "Int", new Addition(new Symbol("a"), literal(2))));
         // {
         //    var a: Int = 40
         //    { var a: Int = a + 2 }
         // }
         Block outer = block(
-                new Assignment(var("a", "Int"), literal(40)),
+                var("a", "Int", literal(40)),
                 inner);
 
         assertValue(42, interpret(outer));
@@ -41,7 +40,7 @@ public class VisibilityScopeTest extends AbstractInterpreterTest {
 
     @Test
     void shouldThrowException_whenVariableUsedOutsideOfScope() {
-        Block inner = block(new Assignment(var("a", "Int"), literal(42)));
+        Block inner = block(var("a", "Int", literal(42)));
         // {
         //   { var a: Int = 42}
         //   a
