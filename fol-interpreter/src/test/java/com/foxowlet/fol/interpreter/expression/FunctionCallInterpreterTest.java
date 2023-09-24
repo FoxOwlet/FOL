@@ -77,18 +77,15 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
     }
 
     @Test
-    void shouldThrowException_whenArgumentUsedOutsideOfFunctionScope() {
-        // #(a: Int){ a }
-        Lambda lambda = lambda(block(new Symbol("a")), formal("a", "Int"));
-        // #(a: Int){ a }(42)
-        FunctionCall functionCall = call(lambda, literal(42));
-        Symbol var = new Symbol("a");
+    void shouldResolveVariable_whenDeclaredInCallArguments() {
+        Lambda lambda = lambda(block(), formal("a", "Int"));
+        Assignment assignment = var("a", "Int", literal(42));
         // {
-        //   #(a: Int){ a }(42)
+        //   #(a: Int){ }(var a: Int = 42)
         //   a
         // }
-        Block block = block(functionCall, var);
+        Block block = block(call(lambda, assignment), new Symbol("a"));
 
-        assertError(block);
+        assertValue(42, interpret(block));
     }
 }

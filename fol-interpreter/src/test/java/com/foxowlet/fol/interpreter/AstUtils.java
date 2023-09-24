@@ -38,6 +38,14 @@ public final class AstUtils {
         return new VarDecl(new Symbol(name), type);
     }
 
+    public static Assignment var(String name, String type, Expression value) {
+        return new Assignment(var(name, type), value);
+    }
+
+    public static Assignment var(String name, Type type, Expression value) {
+        return new Assignment(var(name, type), value);
+    }
+
     public static Block block(Expression... exprs) {
         return new Block(Arrays.asList(exprs));
     }
