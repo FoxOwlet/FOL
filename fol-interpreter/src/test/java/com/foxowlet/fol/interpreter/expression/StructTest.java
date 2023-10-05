@@ -2,15 +2,11 @@ package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
-import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
+import static com.foxowlet.fol.interpreter.AssertionUtils.assertStruct;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class StructTest extends AbstractInterpreterTest {
     @Test
@@ -24,8 +20,7 @@ public class StructTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        Value value = assertInstanceOf(Value.class, actual);
-        assertArrayEquals(new IntType().encode(42), (byte[]) value.value());
+        assertStruct(actual, new IntType().encode(42));
     }
 
     @Test
@@ -44,9 +39,8 @@ public class StructTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        Value value = assertInstanceOf(Value.class, actual);
-        byte[] actualBytes = (byte[]) value.value();
-        assertArrayEquals(new IntType().encode(42), Arrays.copyOf(actualBytes, 4));
-        assertArrayEquals(new IntType().encode(-99), Arrays.copyOfRange(actualBytes, 4, 8));
+        assertStruct(actual,
+                new IntType().encode(42),
+                new IntType().encode(-99));
     }
 }
