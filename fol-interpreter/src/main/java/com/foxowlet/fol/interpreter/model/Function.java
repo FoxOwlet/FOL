@@ -23,14 +23,10 @@ public record Function(int id, List<FunctionParameter> params, Block body) imple
                             InterpretationContext context) {
         Iterator<FunctionParameter> paramsIterator = params.iterator();
         Iterator<Value> argumentsIterator = arguments.iterator();
+        // assume same length. It's checked by FunctionCallInterpreter before the call
         while (paramsIterator.hasNext() && argumentsIterator.hasNext()) {
             Variable formal = makeParameter(paramsIterator.next(), context);
             bind(formal, argumentsIterator.next());
-        }
-        if (paramsIterator.hasNext() || argumentsIterator.hasNext()) {
-            // not an InterpreterException as we already checked the lengths before
-            // this should be never reached during a normal execution and acts like a guard check
-            throw new IllegalStateException("Parameters and arguments length mismatch");
         }
     }
 

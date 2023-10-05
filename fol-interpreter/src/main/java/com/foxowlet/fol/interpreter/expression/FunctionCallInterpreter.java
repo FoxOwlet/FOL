@@ -20,9 +20,8 @@ public class FunctionCallInterpreter implements ExpressionInterpreter<FunctionCa
         // first convert all the arguments (actuals)
         // this must happen in the outer scope (e.g. if the expression contains variable declaration)
         List<Value> arguments = convertArguments(expression.arguments(), context);
-        // then create a fresh scope for function's formal parameters and bind them
+        // then call the function in a fresh scope
         context.enterScope();
-        // then interpret body using bound params
         Object returnValue = function.call(arguments, context);
         context.exitScope();
         return returnValue;
