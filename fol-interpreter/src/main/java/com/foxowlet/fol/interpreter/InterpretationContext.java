@@ -2,8 +2,11 @@ package com.foxowlet.fol.interpreter;
 
 import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.interpreter.exception.TypeException;
+import com.foxowlet.fol.interpreter.expression.context.ExpressionContext;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.MemoryBlock;
+
+import java.util.function.Supplier;
 
 public interface InterpretationContext {
     MemoryBlock allocateMemory(int amount);
@@ -27,4 +30,12 @@ public interface InterpretationContext {
     }
 
     int allocateFunction();
+
+    ExpressionContext expressionContext();
+
+    default <T extends ExpressionContext> T expressionContext(Class<T> tClass) {
+        return ReflectionUtils.as(expressionContext(), tClass);
+    }
+
+    <T> T withExpressionContext(ExpressionContext ctx, Supplier<T> action);
 }
