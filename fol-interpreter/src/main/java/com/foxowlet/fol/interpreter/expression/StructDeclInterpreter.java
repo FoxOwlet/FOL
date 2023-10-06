@@ -14,6 +14,6 @@ public class StructDeclInterpreter implements ExpressionInterpreter<StructDecl> 
         });
         StructType type = new StructType(expression.name().name(), ctx.totalSize(), ctx.fields());
         context.registerSymbol(type.name(), type);
-        return null;
+        return type;
     }
 }
