@@ -56,10 +56,11 @@ public class Interpreter {
 
     private Object interpret(Expression expression, InterpretationContext context) {
         Class<? extends Expression> exprClass = expression.getClass();
-        Key key = new Key(exprClass, context.expressionContext());
+        Class<? extends ExpressionContext> ctxClass = context.expressionContext().getClass();
+        Key key = new Key(exprClass, ctxClass);
         ExpressionInterpreter<?> interpreter = interpreterMap.get(key);
         if (interpreter == null && context.expressionContext().fallbackToDefault()) {
-            interpreter = interpreterMap.get(new Key(exprClass, new DefaultContext()));
+            interpreter = interpreterMap.get(new Key(exprClass, DefaultContext.class));
         }
         if (interpreter == null) {
             throw new IllegalStateException("No interpreter defined for " + expression.getClass().getName());
@@ -69,9 +70,7 @@ public class Interpreter {
 
     private static void register(ExpressionInterpreter<?> interpreter) {
         Class<?> exprClass = ReflectionUtils.expressionClass(interpreter);
-        for (ExpressionContext ctx : interpreter.supportedContexts()) {
-            interpreterMap.put(new Key(exprClass, ctx), interpreter);
-        }
+        interpreterMap.put(new Key(exprClass, interpreter.supportedContext()), interpreter);
     }
 
     public final class Context implements InterpretationContext {
@@ -137,5 +136,5 @@ public class Interpreter {
         }
     }
 
-    private record Key(Class<?> exprClass, ExpressionContext ctx) {}
+    private record Key(Class<?> exprClass, Class<? extends ExpressionContext> ctxClass) {}
 }

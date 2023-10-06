@@ -29,14 +29,4 @@ public class StructDeclContext implements ExpressionContext {
     public List<FieldDecl> fields() {
         return fields;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass() == StructDeclContext.class;
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
