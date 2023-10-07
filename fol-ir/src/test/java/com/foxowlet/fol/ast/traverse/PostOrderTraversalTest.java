@@ -3,8 +3,6 @@ package com.foxowlet.fol.ast.traverse;
 import com.foxowlet.fol.ast.*;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.ast.traverse.MatchUtils.match;
-import static com.foxowlet.fol.ast.traverse.MatchUtils.matcher;
 import static com.foxowlet.fol.ast.traverse.TraversalAssertions.given;
 
 @SuppressWarnings("DuplicateExpressions")
@@ -41,8 +39,8 @@ class PostOrderTraversalTest {
                         new ScalarType(new Symbol("Int"))),
                 new Symbol("a"))))
                 .when(node -> switch (node) {
-                    case Symbol(String name) ->
-                            match(name, "a", new Symbol("b"));
+                    case Symbol(String name) when name.equals("a") ->
+                            new Symbol("b");
                     default -> null;
                 })
                 .then(new Block(NodeSeq.of(
@@ -58,8 +56,8 @@ class PostOrderTraversalTest {
                         new FunctionType(new ScalarType(new Symbol("Long")),
                                 new ScalarType(new Symbol("Unit"))))))
                 .when(node -> switch (node) {
-                    case Symbol(String name) ->
-                            match(name, "a", new Symbol("b"));
+                    case Symbol(String name) when name.equals("a") ->
+                            new Symbol("b");
                     case FunctionType(ScalarType __, FunctionType ret) ->
                             ret;
                     default -> null;
@@ -75,15 +73,13 @@ class PostOrderTraversalTest {
                 new VarDecl(new Symbol("a"), new ScalarType(new Symbol("Int"))),
                 new VarDecl(new Symbol("b"), new ScalarType(new Symbol("Unit"))))))
                 .when(node -> switch (node) {
-                    case Symbol(String name) ->
-                            matcher()
-                                    .cond(name, "b", new Symbol("test"))
-                                    .otherwise(name, "Unit", new Symbol("Test"));
-                    case VarDecl(Symbol(String var), ScalarType(Symbol(String type))) ->
-                            matcher()
-                                    .match(var, "test")
-                                    .match(type, "Test")
-                                    .then(new Symbol("test"));
+                    case Symbol(String name) when name.equals("b") ->
+                            new Symbol("test");
+                    case Symbol(String name) when name.equals("Unit") ->
+                            new Symbol("Test");
+                    case VarDecl(Symbol(String var), ScalarType(Symbol(String type)))
+                            when var.equals("test") && type.equals("Test") ->
+                            new Symbol("test");
                     default -> null;
                 })
                 .then(new Block(NodeSeq.of(
@@ -95,7 +91,7 @@ class PostOrderTraversalTest {
     void shouldThrowException_whenIncompatibleTypes() {
         given(new VarDecl(new Symbol("a"), new ScalarType(new Symbol("Int"))))
                 .when(node -> switch (node) {
-                    case Symbol(String name) -> match(name, "a", new IntLiteral(42));
+                    case Symbol(String name) when name.equals("a") -> new IntLiteral(42);
                     default -> null;
                 })
                 .thenFail();
