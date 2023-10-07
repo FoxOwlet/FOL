@@ -24,6 +24,12 @@ public final class TraversalAssertions {
         return this;
     }
 
+    public TraversalAssertions when(AbstractTransformation transformation) {
+        return when(preStop(transformation::preStop))
+                .when(preContinue(transformation::preContinue))
+                .when(post(transformation::post));
+    }
+
     public TraversalAssertions when(Function<? super Node, ? extends Node> rule) {
         return when(post(rule));
     }
