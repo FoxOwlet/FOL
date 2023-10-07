@@ -1,29 +1,24 @@
 package com.foxowlet.fol.ast.traverse;
 
 import com.foxowlet.fol.ast.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.function.Function;
 
 import static com.foxowlet.fol.ast.traverse.MatchUtils.match;
 import static com.foxowlet.fol.ast.traverse.MatchUtils.matcher;
-import static com.foxowlet.fol.ast.traverse.PostOrderTraversalTest.PostOrderTraversalAssertions.given;
+import static com.foxowlet.fol.ast.traverse.TraversalAssertions.given;
 
 @SuppressWarnings("DuplicateExpressions")
 class PostOrderTraversalTest {
     @Test
     void shouldDoNothing_whenNoRuleGiven() {
         Block node = new Block(NodeSeq.of(new Symbol("a"), new Symbol("b")));
-        given(node)
-                .when(Function.identity())
-                .then(node);
+        given(node).then(node);
     }
 
     @Test
     void shouldUpdateNode() {
         given(new Symbol("a"))
-                .when(node -> new Symbol("b"))
+                .when((Node node) -> new Symbol("b"))
                 .then(new Symbol("b"));
     }
 
@@ -32,7 +27,7 @@ class PostOrderTraversalTest {
         given(new VarDecl(new Symbol("a"),
                 new ScalarType(new Symbol("Int"))))
                 .when(node -> switch (node) {
-                    case Symbol __ -> new Symbol("foo");
+                    case Symbol ignored -> new Symbol("foo");
                     default -> null;
                 })
                 .then(new VarDecl(new Symbol("foo"),
@@ -89,7 +84,7 @@ class PostOrderTraversalTest {
                                     .match(var, "test")
                                     .match(type, "Test")
                                     .then(new Symbol("test"));
-                    default ->  null;
+                    default -> null;
                 })
                 .then(new Block(NodeSeq.of(
                         new VarDecl(new Symbol("a"), new ScalarType(new Symbol("Int"))),
@@ -100,40 +95,9 @@ class PostOrderTraversalTest {
     void shouldThrowException_whenIncompatibleTypes() {
         given(new VarDecl(new Symbol("a"), new ScalarType(new Symbol("Int"))))
                 .when(node -> switch (node) {
-                    case Symbol(String name) ->
-                            match(name, "a", new IntLiteral(42));
+                    case Symbol(String name) -> match(name, "a", new IntLiteral(42));
                     default -> null;
                 })
                 .thenFail();
     }
-
-    static final class PostOrderTraversalAssertions {
-        private final Node node;
-        private Function<? super Node, ? extends Node> rule;
-
-        private PostOrderTraversalAssertions(Node node) {
-            this.node = node;
-            this.rule = Function.identity();
-        }
-
-        public static PostOrderTraversalAssertions given(Node node) {
-            return new PostOrderTraversalAssertions(node);
-        }
-
-        public PostOrderTraversalAssertions when(Function<? super Node, ? extends Node> rule) {
-            this.rule = rule;
-            return this;
-        }
-
-        public void then(Node expected) {
-            PostOrderTraversal traversal = new PostOrderTraversal(rule);
-            Assertions.assertEquals(expected, traversal.traverse(node));
-        }
-
-        public void thenFail() {
-            PostOrderTraversal traversal = new PostOrderTraversal(rule);
-            Assertions.assertThrows(Exception.class, () -> traversal.traverse(node));
-        }
-    }
-
 }
