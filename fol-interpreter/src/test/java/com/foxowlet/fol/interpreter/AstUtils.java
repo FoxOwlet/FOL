@@ -2,9 +2,6 @@ package com.foxowlet.fol.interpreter;
 
 import com.foxowlet.fol.ast.*;
 
-import java.util.Arrays;
-import java.util.List;
-
 public final class AstUtils {
     private AstUtils() {}
 
@@ -47,19 +44,19 @@ public final class AstUtils {
     }
 
     public static Block block(Expression... exprs) {
-        return new Block(Arrays.asList(exprs));
+        return new Block(NodeSeq.of(exprs));
     }
 
     public static FunctionCall call(Expression target, Expression... params) {
-        return new FunctionCall(target, Arrays.asList(params));
+        return new FunctionCall(target, NodeSeq.of(params));
     }
 
-    public static Lambda lambda(List<FormalParameter> params, Block body) {
+    public static Lambda lambda(NodeSeq<FormalParameter> params, Block body) {
         return new Lambda(params, body);
     }
 
     public static Lambda lambda(Block body, FormalParameter... params) {
-        return lambda(Arrays.asList(params), body);
+        return lambda(NodeSeq.of(params), body);
     }
 
     public static FormalParameter formal(String name, Type type) {
@@ -70,24 +67,24 @@ public final class AstUtils {
         return formal(name, type(type));
     }
 
-    public static FunctionDecl fdecl(String name, List<FormalParameter> params, Type type, Block body) {
+    public static FunctionDecl fdecl(String name, NodeSeq<FormalParameter> params, Type type, Block body) {
         return new FunctionDecl(new Symbol(name), params, type, body);
     }
 
-    public static FunctionDecl fdecl(String name, List<FormalParameter> params, String type, Block body) {
+    public static FunctionDecl fdecl(String name, NodeSeq<FormalParameter> params, String type, Block body) {
         return fdecl(name, params, type(type), body);
     }
 
     public static FunctionDecl fdecl(String name, Type type, Block body, FormalParameter... params) {
-        return fdecl(name, List.of(params), type, body);
+        return fdecl(name, NodeSeq.of(params), type, body);
     }
 
     public static FunctionDecl fdecl(String name, String type, Block body, FormalParameter... params) {
-        return fdecl(name, List.of(params), type(type), body);
+        return fdecl(name, NodeSeq.of(params), type(type), body);
     }
 
     public static FunctionDecl fdecl(String name) {
-        return fdecl(name, List.of(), type("Unit"), block());
+        return fdecl(name, NodeSeq.of(), type("Unit"), block());
     }
 
     public static Expression literal(Object value) {

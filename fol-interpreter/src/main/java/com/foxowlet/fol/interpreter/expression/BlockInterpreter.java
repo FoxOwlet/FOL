@@ -9,7 +9,7 @@ public class BlockInterpreter implements ExpressionInterpreter<Block> {
     public Object interpret(Block expression, InterpretationContext context) {
         Object result = null;
         context.enterScope();
-        for (Expression expr : expression.exprs()) {
+        for (Expression expr : expression.exprs().subnodes()) {
             result = context.interpret(expr);
         }
         context.exitScope();
