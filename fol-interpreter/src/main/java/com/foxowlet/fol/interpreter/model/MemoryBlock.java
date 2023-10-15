@@ -25,6 +25,15 @@ public class MemoryBlock implements MemoryLocation {
         memory.write(address, data);
     }
 
+    @Override
+    public MemoryLocation slice(int offset, int size) {
+        if (offset + size > this.size) {
+            throw new IllegalStateException("Memory access out of bounds(block size: %d, offset: %d, slice size: %d)"
+                    .formatted(this.size, offset, size));
+        }
+        return new MemoryBlock(memory, address + offset, size);
+    }
+
     private void checkSize(byte[] data) {
         if (data.length != size) {
             throw new IllegalStateException("Memory block size mismatch, expected %d, got %d"

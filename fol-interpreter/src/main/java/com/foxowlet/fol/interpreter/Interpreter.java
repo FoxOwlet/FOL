@@ -4,8 +4,6 @@ import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.emulator.memory.Memory;
 import com.foxowlet.fol.interpreter.expression.*;
-import com.foxowlet.fol.interpreter.expression.context.DefaultContext;
-import com.foxowlet.fol.interpreter.expression.context.ExpressionContext;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.MemoryBlock;
 import com.foxowlet.fol.interpreter.scope.LookupScope;
@@ -13,10 +11,9 @@ import com.foxowlet.fol.interpreter.scope.LookupScope;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class Interpreter {
-    private static final Map<Key, ExpressionInterpreter<?>> interpreterMap = new HashMap<>();
+    private static final Map<Class<?>, ExpressionInterpreter<?>> interpreterMap = new HashMap<>();
 
     static {
         List.of(
@@ -30,7 +27,7 @@ public class Interpreter {
                 new FunctionCallInterpreter(),
                 new FunctionDeclInterpreter(),
                 new StructDeclInterpreter(),
-                new FieldDeclInterpreter()
+                new FieldAccessInterpreter()
         ).forEach(Interpreter::register);
     }
 
@@ -55,13 +52,7 @@ public class Interpreter {
     }
 
     private Object interpret(Expression expression, InterpretationContext context) {
-        Class<? extends Expression> exprClass = expression.getClass();
-        Class<? extends ExpressionContext> ctxClass = context.expressionContext().getClass();
-        Key key = new Key(exprClass, ctxClass);
-        ExpressionInterpreter<?> interpreter = interpreterMap.get(key);
-        if (interpreter == null && context.expressionContext().fallbackToDefault()) {
-            interpreter = interpreterMap.get(new Key(exprClass, DefaultContext.class));
-        }
+        ExpressionInterpreter<?> interpreter = interpreterMap.get(expression.getClass());
         if (interpreter == null) {
             throw new IllegalStateException("No interpreter defined for " + expression.getClass().getName());
         }
@@ -70,18 +61,16 @@ public class Interpreter {
 
     private static void register(ExpressionInterpreter<?> interpreter) {
         Class<?> exprClass = ReflectionUtils.expressionClass(interpreter);
-        interpreterMap.put(new Key(exprClass, interpreter.supportedContext()), interpreter);
+        interpreterMap.put(exprClass, interpreter);
     }
 
     public final class Context implements InterpretationContext {
         private final LookupScope lookupScope;
         private int functionId;
-        private ExpressionContext expressionContext;
 
         private Context() {
             this.lookupScope = new LookupScope();
             this.functionId = 0;
-            this.expressionContext = new DefaultContext();
         }
 
         @Override
@@ -120,21 +109,5 @@ public class Interpreter {
         public int allocateFunction() {
             return ++functionId;
         }
-
-        @Override
-        public ExpressionContext expressionContext() {
-            return expressionContext;
-        }
-
-        @Override
-        public <T> T withExpressionContext(ExpressionContext ctx, Supplier<T> action) {
-            ExpressionContext oldCtx = expressionContext;
-            expressionContext = ctx;
-            T result = action.get();
-            expressionContext = oldCtx;
-            return result;
-        }
     }
-
-    private record Key(Class<?> exprClass, Class<? extends ExpressionContext> ctxClass) {}
 }

@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-public sealed interface Node permits Expression, FormalParameter, NodeSeq, Type {
+public sealed interface Node permits Expression, FormalParameter, NodeSeq, Type, FieldDecl {
 
     default List<? extends Node> children() {
         Field[] fields = getClass().getDeclaredFields();

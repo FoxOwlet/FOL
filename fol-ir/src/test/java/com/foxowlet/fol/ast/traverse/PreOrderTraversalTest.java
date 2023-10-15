@@ -39,7 +39,7 @@ public class PreOrderTraversalTest {
                         new Assignment(new Symbol("a"), new IntLiteral(42))));
     }
 
-    @Test
+    @Test //FIXME: the result is same even with post-order traverse, the test is useless
     void shouldApplyRulesInPreOrder() {
         Map<String, Integer> counts = new HashMap<>();
 

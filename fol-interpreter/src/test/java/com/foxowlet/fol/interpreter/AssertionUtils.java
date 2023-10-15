@@ -1,6 +1,6 @@
 package com.foxowlet.fol.interpreter;
 
-import com.foxowlet.fol.interpreter.model.FieldDecl;
+import com.foxowlet.fol.interpreter.model.Field;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.Variable;
 import com.foxowlet.fol.interpreter.model.type.FunctionTypeDescriptor;
@@ -31,7 +31,7 @@ public final class AssertionUtils {
         assertEquals(parts[lastIndex], type);
     }
 
-    public static void assertStructType(Object type, String name, FieldDecl... fields) {
+    public static void assertStructType(Object type, String name, Field... fields) {
         StructType struct = assertInstanceOf(StructType.class, type);
         assertEquals(name, struct.name());
         assertEquals(Arrays.asList(fields), struct.fields());
