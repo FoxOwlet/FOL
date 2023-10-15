@@ -14,7 +14,7 @@ public class FunctionDeclInterpreter implements ExpressionInterpreter<FunctionDe
     }
 
     private Type createType(FunctionDecl expression) {
-        FormalParameter[] params = expression.params().toArray(new FormalParameter[0]);
+        FormalParameter[] params = expression.params().subnodes().toArray(new FormalParameter[0]);
         Type type = expression.returnType();
         if (params.length == 0) {
             return new FunctionType(new ScalarType(new Symbol("Unit")), type);

@@ -16,10 +16,10 @@ public class FunctionCallInterpreter implements ExpressionInterpreter<FunctionCa
     public Object interpret(FunctionCall expression, InterpretationContext context) {
         Value value = context.interpret(expression.target(), Value.class);
         Callable function = ReflectionUtils.as(value.value(), Callable.class);
-        checkParameters(function.params(), expression.arguments());
+        checkParameters(function.params(), expression.arguments().subnodes());
         // first convert all the arguments (actuals)
         // this must happen in the outer scope (e.g. if the expression contains variable declaration)
-        List<Value> arguments = convertArguments(expression.arguments(), context);
+        List<Value> arguments = convertArguments(expression.arguments().subnodes(), context);
         // then call the function in a fresh scope
         context.enterScope();
         Object returnValue = function.call(arguments, context);
