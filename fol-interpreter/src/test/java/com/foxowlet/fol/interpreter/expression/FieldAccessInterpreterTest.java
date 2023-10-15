@@ -118,4 +118,20 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         assertValue(52, actual);
     }
+
+    @Test
+    void shouldFail_whenUnresolvedField() {
+        // struct Foo(i: Int)
+        StructDecl decl = new StructDecl(new Symbol("Foo"), NodeSeq.of(
+                field("i", "Int")));
+        // var foo: Foo = Foo(42)
+        Assignment var = var("foo", "Foo",
+                call(new Symbol("Foo"), literal(42)));
+        // foo.j
+        FieldAccess field = fieldAccess("foo", "j");
+        // { ... }
+        Block block = block(decl, var, field);
+
+        assertError(block);
+    }
 }

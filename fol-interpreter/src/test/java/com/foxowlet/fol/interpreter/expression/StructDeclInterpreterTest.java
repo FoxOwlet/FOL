@@ -15,11 +15,15 @@ import static com.foxowlet.fol.interpreter.AstUtils.*;
 class StructDeclInterpreterTest extends AbstractInterpreterTest {
     @Test
     void shouldRegisterStructType() {
+        // struct Foo(i: Int, j: Int, k: Int)
         StructDecl structDecl = new StructDecl(new Symbol("Foo"), NodeSeq.of(
                 field("i", "Int"),
                 field("j", "Int"),
                 field("k", "Int")));
-        Block block = block(structDecl, new Symbol("Foo"));
+        // Foo
+        Symbol type = new Symbol("Foo");
+        // { ... }
+        Block block = block(structDecl, type);
 
         Object actual = interpret(block);
 
@@ -29,4 +33,13 @@ class StructDeclInterpreterTest extends AbstractInterpreterTest {
                 new Field(8, "k", new IntType()));
     }
 
+    @Test
+    void shouldFail_whenDuplicateField() {
+        // struct Foo(i: Int, i: Int)
+        StructDecl structDecl = new StructDecl(new Symbol("Foo"), NodeSeq.of(
+                field("i", "Int"),
+                field("i", "Int")));
+
+        assertError(structDecl);
+    }
 }

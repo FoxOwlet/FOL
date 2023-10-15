@@ -6,6 +6,7 @@ import com.foxowlet.fol.interpreter.model.*;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public record StructType(String name, int size, List<Field> fields) implements TypeDescriptor, Callable {
 
@@ -38,5 +39,11 @@ public record StructType(String name, int size, List<Field> fields) implements T
         return fields.stream()
                 .map(field -> new FunctionParameter(field.name(), field.type()))
                 .toList();
+    }
+
+    public Optional<Field> getField(String name) {
+        return fields.stream()
+                .filter(field -> field.name().equals(name))
+                .findAny();
     }
 }
