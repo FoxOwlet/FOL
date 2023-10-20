@@ -2,6 +2,7 @@ package com.foxowlet.fol.interpreter.model;
 
 import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.interpreter.InterpretationContext;
+import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,16 @@ public record Function(int id, List<FunctionParameter> params, Block body) imple
     @Override
     public Object value() {
         return this;
+    }
+
+    @Override
+    public TypeDescriptor type() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public MemoryLocation memory() {
+        return new DummyMemoryLocation();
     }
 
     @Override

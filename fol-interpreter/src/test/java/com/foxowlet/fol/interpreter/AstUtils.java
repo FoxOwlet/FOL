@@ -27,6 +27,10 @@ public final class AstUtils {
         return type;
     }
 
+    public static FieldDecl field(String name, String type) {
+        return new FieldDecl(new Symbol(name), type(type));
+    }
+
     public static VarDecl var(String name, String type) {
         return new VarDecl(new Symbol(name), type(type));
     }
@@ -85,6 +89,14 @@ public final class AstUtils {
 
     public static FunctionDecl fdecl(String name) {
         return fdecl(name, NodeSeq.of(), type("Unit"), block());
+    }
+
+    public static FieldAccess fieldAccess(String target, String field) {
+        return fieldAccess(new Symbol(target), field);
+    }
+
+    public static FieldAccess fieldAccess(Expression target, String field) {
+        return new FieldAccess(target, new Symbol(field));
     }
 
     public static Expression literal(Object value) {
