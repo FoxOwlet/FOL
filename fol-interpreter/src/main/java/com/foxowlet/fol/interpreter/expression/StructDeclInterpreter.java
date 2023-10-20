@@ -28,7 +28,7 @@ public class StructDeclInterpreter implements ExpressionInterpreter<StructDecl> 
         int offset = 0;
         Set<String> fieldNames = new HashSet<>();
         List<Field> fields = new ArrayList<>();
-        for (FieldDecl(Symbol(String name), Type rawType) : expression.fields().subnodes()) {
+        for (FieldDecl(Symbol(String name), Type rawType) : expression.fields()) {
             if (fieldNames.contains(name)) {
                 throw new DuplicateFieldException(name, expression.name().name());
             }
