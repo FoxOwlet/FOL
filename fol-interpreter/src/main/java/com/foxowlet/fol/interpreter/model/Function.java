@@ -4,53 +4,30 @@ import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.internal.BiIterator;
-import com.foxowlet.fol.interpreter.internal.TypeUtils;
 import com.foxowlet.fol.interpreter.model.memory.DummyMemoryLocation;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 import com.foxowlet.fol.interpreter.model.memory.MemoryLocation;
+import com.foxowlet.fol.interpreter.model.type.FunctionTypeDescriptor;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 import java.util.List;
 
-public final class Function implements Value, Callable {
-    private final int id;
-    private final List<FunctionParameter> params;
-    private final TypeDescriptor returnType;
-    private final TypeDescriptor type;
-    private final Block body;
-
-    public Function(int id, List<FunctionParameter> params, TypeDescriptor returnType, Block body, InterpretationContext context) {
-        this.id = id;
-        this.params = params;
-        this.returnType = returnType;
-        this.type = TypeUtils.makeFunctionTypeDescriptor(params, returnType, context);
-        this.body = body;
-    }
-
-    public int id() {
-        return id;
-    }
-
-    @Override
-    public List<FunctionParameter> params() {
-        return params;
-    }
-
-    public Block body() {
-        return body;
-    }
-
-    public TypeDescriptor returnType() {
-        return returnType;
-    }
+public record Function(int id,
+                       List<FunctionParameter> params,
+                       TypeDescriptor type,
+                       Block body)
+        implements Value, Callable {
 
     @Override
     public Object value() {
         return this;
     }
 
-    @Override
-    public TypeDescriptor type() {
+    public TypeDescriptor returnType() {
+        TypeDescriptor type = this.type;
+        while (type instanceof FunctionTypeDescriptor ftype) {
+            type = ftype.returnType();
+        }
         return type;
     }
 
@@ -63,6 +40,7 @@ public final class Function implements Value, Callable {
     public Value call(List<Value> actuals, InterpretationContext context) {
         bindParams(params(), actuals, context);
         Value value = context.interpret(body(), Value.class);
+        TypeDescriptor returnType = returnType();
         if (!returnType.isCompatibleWith(value.type())) {
             throw new IncompatibleTypeException(value, returnType);
         }

@@ -3,6 +3,7 @@ package com.foxowlet.fol.interpreter.expression;
 import com.foxowlet.fol.ast.FormalParameter;
 import com.foxowlet.fol.ast.Lambda;
 import com.foxowlet.fol.interpreter.InterpretationContext;
+import com.foxowlet.fol.interpreter.internal.TypeUtils;
 import com.foxowlet.fol.interpreter.model.FunctionParameter;
 import com.foxowlet.fol.interpreter.model.Function;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
@@ -22,7 +23,8 @@ public class LambdaInterpreter implements ExpressionInterpreter<Lambda> {
         int id = context.allocateFunction();
         TypeDescriptor returnType = typeInterpreter.interpret(expression.returnType(), context);
         List<FunctionParameter> params = convertParams(expression.params().subnodes(), context);
-        Function function = new Function(id, params, returnType, expression.body(), context);
+        TypeDescriptor type = TypeUtils.makeFunctionTypeDescriptor(params, returnType, context);
+        Function function = new Function(id, params, type, expression.body());
         context.registerSymbol(String.valueOf(id), function);
         return function;
     }
