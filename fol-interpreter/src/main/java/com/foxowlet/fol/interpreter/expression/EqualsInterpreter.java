@@ -9,7 +9,7 @@ import com.foxowlet.fol.interpreter.model.type.BooleanType;
 
 public class EqualsInterpreter implements ExpressionInterpreter<Equals> {
     @Override
-    public Object interpret(Equals expression, InterpretationContext context) {
+    public Value interpret(Equals expression, InterpretationContext context) {
         Value left = context.interpret(expression.left(), Value.class);
         Value right = context.interpret(expression.right(), Value.class);
         if (!right.type().isCompatibleWith(left.type())) {

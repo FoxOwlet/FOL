@@ -2,8 +2,6 @@ package com.foxowlet.fol.interpreter;
 
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.emulator.Emulator;
-import com.foxowlet.fol.interpreter.model.Container;
-import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 import java.util.Scanner;
 
@@ -52,12 +50,7 @@ public class Main {
             int arg = Integer.parseInt(line);
             FunctionCall call = new FunctionCall(new Symbol("fib"), NodeSeq.of(new IntLiteral(arg)));
 
-            Object actual = interpreter.interpret(call);
-            if (actual instanceof Container(Object value, TypeDescriptor __)) {
-                System.out.println(value);
-            } else {
-                System.out.println("Something went wrong");
-            }
+            System.out.println(interpreter.interpret(call));
         }
     }
 }

@@ -8,7 +8,7 @@ import com.foxowlet.fol.interpreter.model.Value;
 
 public class IfInterpreter implements ExpressionInterpreter<If> {
     @Override
-    public Object interpret(If expression, InterpretationContext context) {
+    public Value interpret(If expression, InterpretationContext context) {
         Value value = context.interpret(expression.condition(), Value.class);
         boolean condition = ReflectionUtils.as(value.value(), Boolean.class);
         Expression result = condition ? expression.thenBranch() : expression.elseBranch();
