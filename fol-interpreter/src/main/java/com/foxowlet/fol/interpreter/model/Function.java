@@ -2,12 +2,48 @@ package com.foxowlet.fol.interpreter.model;
 
 import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.interpreter.InterpretationContext;
+import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
+import com.foxowlet.fol.interpreter.internal.BiIterator;
+import com.foxowlet.fol.interpreter.internal.TypeUtils;
+import com.foxowlet.fol.interpreter.model.memory.DummyMemoryLocation;
+import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
+import com.foxowlet.fol.interpreter.model.memory.MemoryLocation;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
-import java.util.Iterator;
 import java.util.List;
 
-public record Function(int id, List<FunctionParameter> params, Block body) implements Value, Callable {
+public final class Function implements Value, Callable {
+    private final int id;
+    private final List<FunctionParameter> params;
+    private final TypeDescriptor returnType;
+    private final TypeDescriptor type;
+    private final Block body;
+
+    public Function(int id, List<FunctionParameter> params, TypeDescriptor returnType, Block body, InterpretationContext context) {
+        this.id = id;
+        this.params = params;
+        this.returnType = returnType;
+        this.type = TypeUtils.makeFunctionTypeDescriptor(params, returnType, context);
+        this.body = body;
+    }
+
+    public int id() {
+        return id;
+    }
+
+    @Override
+    public List<FunctionParameter> params() {
+        return params;
+    }
+
+    public Block body() {
+        return body;
+    }
+
+    public TypeDescriptor returnType() {
+        return returnType;
+    }
+
     @Override
     public Object value() {
         return this;
@@ -15,7 +51,7 @@ public record Function(int id, List<FunctionParameter> params, Block body) imple
 
     @Override
     public TypeDescriptor type() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return type;
     }
 
     @Override
@@ -26,19 +62,18 @@ public record Function(int id, List<FunctionParameter> params, Block body) imple
     @Override
     public Value call(List<Value> actuals, InterpretationContext context) {
         bindParams(params(), actuals, context);
-        return context.interpret(body(), Value.class);
+        Value value = context.interpret(body(), Value.class);
+        if (!returnType.isCompatibleWith(value.type())) {
+            throw new IncompatibleTypeException(value, returnType);
+        }
+        return value;
     }
 
     private void bindParams(List<FunctionParameter> params,
                             List<Value> arguments,
                             InterpretationContext context) {
-        Iterator<FunctionParameter> paramsIterator = params.iterator();
-        Iterator<Value> argumentsIterator = arguments.iterator();
-        // assume same length. It's checked by FunctionCallInterpreter before the call
-        while (paramsIterator.hasNext() && argumentsIterator.hasNext()) {
-            Variable formal = makeParameter(paramsIterator.next(), context);
-            bind(formal, argumentsIterator.next());
-        }
+        new BiIterator<>(params, arguments)
+                .forEachRemaining((param, arg) -> bind(makeParameter(param, context), arg));
     }
 
     private Variable makeParameter(FunctionParameter formal, InterpretationContext context) {

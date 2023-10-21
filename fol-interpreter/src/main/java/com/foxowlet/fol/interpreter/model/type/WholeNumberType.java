@@ -2,15 +2,14 @@ package com.foxowlet.fol.interpreter.model.type;
 
 import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.exception.InvalidTypeSizeException;
+import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 
 import java.util.Objects;
 
 public abstract class WholeNumberType<T extends Number> implements TypeDescriptor {
-    private final Class<T> javaClass;
     private final String folTypeName;
 
-    protected WholeNumberType(Class<T> javaClass, String folTypeName) {
-        this.javaClass = javaClass;
+    protected WholeNumberType(String folTypeName) {
         this.folTypeName = folTypeName;
     }
 
@@ -21,10 +20,10 @@ public abstract class WholeNumberType<T extends Number> implements TypeDescripto
 
     @Override
     public byte[] encode(Object value) {
-        if (!javaClass.isInstance(value)) {
-            throw new IncompatibleTypeException(value, folTypeName);
+        if (!(value instanceof Number)) {
+            throw new IncompatibleTypeException(value, this);
         }
-        long longVal = javaClass.cast(value).longValue();
+        long longVal = ReflectionUtils.as(value, Number.class).longValue();
         byte[] data = new byte[size()];
         for (int i = size() - 1; i >= 0; i--) {
             data[i] = (byte) (longVal & 0xff);

@@ -5,6 +5,7 @@ import com.foxowlet.fol.ast.NodeSeq;
 import com.foxowlet.fol.ast.StructDecl;
 import com.foxowlet.fol.ast.Symbol;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
+import com.foxowlet.fol.interpreter.exception.DuplicateFieldException;
 import com.foxowlet.fol.interpreter.model.Field;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,6 @@ class StructDeclInterpreterTest extends AbstractInterpreterTest {
                 field("i", "Int"),
                 field("i", "Int")));
 
-        assertError(structDecl);
+        assertError(DuplicateFieldException.class, structDecl);
     }
 }

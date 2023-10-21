@@ -2,6 +2,8 @@ package com.foxowlet.fol.interpreter;
 
 import com.foxowlet.fol.ast.*;
 
+import java.util.Arrays;
+
 public final class AstUtils {
     private AstUtils() {}
 
@@ -10,18 +12,13 @@ public final class AstUtils {
     }
 
     public static Type ftype(String... names) {
-        int lastIndex = names.length - 1;
-        Type type = type(names[lastIndex]);
-        for (int i = lastIndex; i >= 0; --i) {
-            type = new FunctionType(type(names[i]), type);
-        }
-        return type;
+        return ftype(Arrays.stream(names).map(AstUtils::type).toArray(Type[]::new));
     }
 
     public static Type ftype(Type... types) {
         int lastIndex = types.length - 1;
         Type type = types[lastIndex];
-        for (int i = lastIndex; i >= 0; --i) {
+        for (int i = lastIndex - 1; i >= 0; --i) {
             type = new FunctionType(types[i], type);
         }
         return type;
@@ -55,12 +52,12 @@ public final class AstUtils {
         return new FunctionCall(target, NodeSeq.of(params));
     }
 
-    public static Lambda lambda(NodeSeq<FormalParameter> params, Block body) {
-        return new Lambda(params, body);
+    public static Lambda lambda(NodeSeq<FormalParameter> params, Type type, Block body) {
+        return new Lambda(params, type, body);
     }
 
     public static Lambda lambda(Block body, FormalParameter... params) {
-        return lambda(NodeSeq.of(params), body);
+        return lambda(NodeSeq.of(params), type("Int"), body);
     }
 
     public static FormalParameter formal(String name, Type type) {

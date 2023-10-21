@@ -20,7 +20,9 @@ public class LambdaInterpreter implements ExpressionInterpreter<Lambda> {
     @Override
     public Object interpret(Lambda expression, InterpretationContext context) {
         int id = context.allocateFunction();
-        Function function = new Function(id, convertParams(expression.params().subnodes(), context), expression.body());
+        TypeDescriptor returnType = typeInterpreter.interpret(expression.returnType(), context);
+        List<FunctionParameter> params = convertParams(expression.params().subnodes(), context);
+        Function function = new Function(id, params, returnType, expression.body(), context);
         context.registerSymbol(String.valueOf(id), function);
         return function;
     }

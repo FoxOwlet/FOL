@@ -2,7 +2,7 @@ package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.VarDecl;
 import com.foxowlet.fol.interpreter.InterpretationContext;
-import com.foxowlet.fol.interpreter.model.MemoryLocation;
+import com.foxowlet.fol.interpreter.model.memory.MemoryLocation;
 import com.foxowlet.fol.interpreter.model.Variable;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 import com.foxowlet.fol.interpreter.type.TypeInterpreter;

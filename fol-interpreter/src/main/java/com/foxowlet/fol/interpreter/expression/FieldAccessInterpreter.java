@@ -5,7 +5,7 @@ import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.exception.UnresolvedFieldException;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Field;
-import com.foxowlet.fol.interpreter.model.MemoryLocation;
+import com.foxowlet.fol.interpreter.model.memory.MemoryLocation;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.Variable;
 import com.foxowlet.fol.interpreter.model.type.StructType;

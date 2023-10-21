@@ -5,7 +5,7 @@ import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.emulator.memory.Memory;
 import com.foxowlet.fol.interpreter.expression.*;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
-import com.foxowlet.fol.interpreter.model.MemoryBlock;
+import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 import com.foxowlet.fol.interpreter.scope.LookupScope;
 
 import java.util.HashMap;
@@ -22,6 +22,8 @@ public class Interpreter {
                 new AssignmentInterpreter(),
                 new BlockInterpreter(),
                 new IntLiteralInterpreter(),
+                new ByteLiteralInterpreter(),
+                new LongLiteralInterpreter(),
                 new AdditionInterpreter(),
                 new LambdaInterpreter(),
                 new FunctionCallInterpreter(),

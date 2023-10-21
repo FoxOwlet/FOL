@@ -2,6 +2,7 @@ package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
+import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
 
@@ -42,5 +43,18 @@ public class StructTest extends AbstractInterpreterTest {
         assertStruct(actual,
                 new IntType().encode(42),
                 new IntType().encode(-99));
+    }
+
+    @Test
+    void shouldThrowException_whenIncompatibleFieldType() {
+        // struct Foo(i: Int)
+        StructDecl struct = new StructDecl(new Symbol("Foo"), NodeSeq.of(
+                field("i", "Int")));
+        // Foo(42L)
+        FunctionCall call = call(new Symbol("Foo"), literal(42L));
+        // { ... }
+        Block block = block(struct, call);
+
+        assertError(IncompatibleTypeException.class, block);
     }
 }

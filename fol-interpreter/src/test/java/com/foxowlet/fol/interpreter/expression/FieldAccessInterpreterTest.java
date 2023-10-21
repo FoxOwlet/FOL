@@ -2,6 +2,7 @@ package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
+import com.foxowlet.fol.interpreter.exception.UnresolvedFieldException;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
 
@@ -132,6 +133,6 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
         // { ... }
         Block block = block(decl, var, field);
 
-        assertError(block);
+        assertError(UnresolvedFieldException.class, block);
     }
 }

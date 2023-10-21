@@ -1,6 +1,5 @@
 package com.foxowlet.fol.interpreter.internal;
 
-import com.foxowlet.fol.interpreter.exception.InterpreterException;
 import com.foxowlet.fol.interpreter.expression.ExpressionInterpreter;
 
 import java.lang.reflect.ParameterizedType;

@@ -1,13 +1,14 @@
 package com.foxowlet.fol.interpreter;
 
-import com.foxowlet.fol.interpreter.model.Field;
-import com.foxowlet.fol.interpreter.model.Value;
-import com.foxowlet.fol.interpreter.model.Variable;
+import com.foxowlet.fol.ast.Block;
+import com.foxowlet.fol.interpreter.model.*;
 import com.foxowlet.fol.interpreter.model.type.FunctionTypeDescriptor;
+import com.foxowlet.fol.interpreter.model.type.IntType;
 import com.foxowlet.fol.interpreter.model.type.StructType;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +20,28 @@ public final class AssertionUtils {
         assertEquals(expected, value.value());
     }
 
-    public static void assertFunctionType(Variable function, TypeDescriptor... parts) {
+    public static void assertFunction(Block body, Object actual) {
+        assertFunction(List.of(), body, actual);
+    }
+
+    public static void assertFunction(List<FunctionParameter> params,
+                                      Block body,
+                                      Object actual) {
+        assertFunction(params, new IntType(), body, actual);
+    }
+
+    public static void assertFunction(List<FunctionParameter> params,
+                                      TypeDescriptor returnType,
+                                      Block body,
+                                      Object actual) {
+        Value value = assertInstanceOf(Value.class, actual);
+        Function function = assertInstanceOf(Function.class, value.value());
+        assertEquals(params, function.params());
+        assertEquals(returnType, function.returnType());
+        assertEquals(body, function.body());
+    }
+
+    public static void assertFunctionType(Value function, TypeDescriptor... parts) {
         TypeDescriptor type = function.type();
         int lastIndex = parts.length - 1;
         for (int i = 0; i < lastIndex; i++) {

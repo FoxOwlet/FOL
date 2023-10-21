@@ -3,7 +3,7 @@ package com.foxowlet.fol.interpreter.model.type;
 public class LongType extends WholeNumberType<Long> {
 
     public LongType() {
-        super(Long.class, "Long");
+        super("Long");
     }
 
     @Override

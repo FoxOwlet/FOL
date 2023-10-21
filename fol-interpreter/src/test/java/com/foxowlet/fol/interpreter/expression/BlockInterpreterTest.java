@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
 
-class BlockTest extends AbstractInterpreterTest {
+class BlockInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldReturnLastExpressionValue() {
