@@ -30,12 +30,15 @@ public class Interpreter {
                 new FunctionCallInterpreter(),
                 new FunctionDeclInterpreter(),
                 new StructDeclInterpreter(),
-                new FieldAccessInterpreter()
+                new FieldAccessInterpreter(),
+                new IfInterpreter(),
+                new EqualsInterpreter()
         ).forEach(Interpreter::register);
     }
 
     private final InterpreterConfiguration config;
     private final Memory memory;
+    private final InterpretationContext context;
     private int offset;
 
     public Interpreter(Emulator emulator) {
@@ -45,12 +48,12 @@ public class Interpreter {
     public Interpreter(Emulator emulator, InterpreterConfiguration config) {
         this.config = config;
         this.memory = emulator.allocate(config.getMemoryLimit());
+        this.context = new Context();
         this.offset = 0;
+        config.getPredefinedProcessor().preprocess(this.context);
     }
 
     public Object interpret(Expression expression) {
-        InterpretationContext context = new Context();
-        config.getPredefinedProcessor().preprocess(context);
         return interpret(expression, context).value();
     }
 
@@ -80,6 +83,9 @@ public class Interpreter {
         public MemoryBlock allocateMemory(int amount) {
             int address = offset;
             offset += amount;
+            if (offset > config.getMemoryLimit()) {
+                throw new OutOfMemoryError();
+            }
             return new MemoryBlock(memory, address, amount);
         }
 

@@ -1,7 +1,5 @@
 package com.foxowlet.fol.ast;
 
 public sealed interface Expression extends Node
-        permits VarDecl, Assignment, Literal, Symbol, ArithmeticExpression, Block,
-        Lambda, FunctionCall, FunctionDecl,
-        StructDecl, FieldAccess {
+        permits ArithmeticExpression, Assignment, Block, BooleanExpression, FieldAccess, FunctionCall, FunctionDecl, If, Lambda, Literal, StructDecl, Symbol, VarDecl {
 }
