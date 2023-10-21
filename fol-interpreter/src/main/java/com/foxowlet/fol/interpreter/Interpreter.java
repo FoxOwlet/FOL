@@ -5,6 +5,7 @@ import com.foxowlet.fol.emulator.Emulator;
 import com.foxowlet.fol.emulator.memory.Memory;
 import com.foxowlet.fol.interpreter.expression.*;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
+import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 import com.foxowlet.fol.interpreter.scope.LookupScope;
 
@@ -50,10 +51,10 @@ public class Interpreter {
     public Object interpret(Expression expression) {
         InterpretationContext context = new Context();
         config.getPredefinedProcessor().preprocess(context);
-        return interpret(expression, context);
+        return interpret(expression, context).value();
     }
 
-    private Object interpret(Expression expression, InterpretationContext context) {
+    private Value interpret(Expression expression, InterpretationContext context) {
         ExpressionInterpreter<?> interpreter = interpreterMap.get(expression.getClass());
         if (interpreter == null) {
             throw new IllegalStateException("No interpreter defined for " + expression.getClass().getName());
@@ -103,7 +104,7 @@ public class Interpreter {
         }
 
         @Override
-        public Object interpret(Expression expression) {
+        public Value interpret(Expression expression) {
             return Interpreter.this.interpret(expression, this);
         }
 

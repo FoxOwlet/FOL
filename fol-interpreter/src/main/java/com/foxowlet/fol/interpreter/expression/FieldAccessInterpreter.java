@@ -12,7 +12,7 @@ import com.foxowlet.fol.interpreter.model.type.StructType;
 
 public class FieldAccessInterpreter implements ExpressionInterpreter<FieldAccess> {
     @Override
-    public Object interpret(FieldAccess expression, InterpretationContext context) {
+    public Value interpret(FieldAccess expression, InterpretationContext context) {
         Value target = context.interpret(expression.target(), Value.class);
         StructType type = ReflectionUtils.as(target.type(), StructType.class);
         String fieldName = expression.field().name();

@@ -7,8 +7,8 @@ import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
 
 import static com.foxowlet.fol.interpreter.AssertionUtils.assertStruct;
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FieldAccessInterpreterTest extends AbstractInterpreterTest {
     @Test
@@ -27,7 +27,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -50,7 +50,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertValue(99, actual);
+        assertEquals(99, actual);
     }
 
     @Test
@@ -93,7 +93,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -117,7 +117,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertValue(52, actual);
+        assertEquals(52, actual);
     }
 
     @Test

@@ -15,11 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class AssertionUtils {
     private AssertionUtils() {}
 
-    public static <T> void assertValue(T expected, Object actual) {
-        Value value = assertInstanceOf(Value.class, actual);
-        assertEquals(expected, value.value());
-    }
-
     public static void assertFunction(Block body, Object actual) {
         assertFunction(List.of(), body, actual);
     }
@@ -34,14 +29,14 @@ public final class AssertionUtils {
                                       TypeDescriptor returnType,
                                       Block body,
                                       Object actual) {
-        Value value = assertInstanceOf(Value.class, actual);
-        Function function = assertInstanceOf(Function.class, value.value());
+        Function function = assertInstanceOf(Function.class, actual);
         assertEquals(params, function.params());
         assertEquals(returnType, function.returnType());
         assertEquals(body, function.body());
     }
 
-    public static void assertFunctionType(Value function, TypeDescriptor... parts) {
+    public static void assertFunctionType(Object actual, TypeDescriptor... parts) {
+        Function function = assertInstanceOf(Function.class, actual);
         TypeDescriptor type = function.type();
         int lastIndex = parts.length - 1;
         for (int i = 0; i < lastIndex; i++) {
@@ -60,8 +55,7 @@ public final class AssertionUtils {
     }
 
     public static void assertStruct(Object actual, byte[]... fields) {
-        Value value = assertInstanceOf(Value.class, actual);
-        byte[] struct = assertInstanceOf(byte[].class, value.value());
+        byte[] struct = assertInstanceOf(byte[].class, actual);
         int offset = 0;
         for (byte[] field : fields) {
             assertArrayEquals(field, Arrays.copyOfRange(struct, offset, offset + field.length));

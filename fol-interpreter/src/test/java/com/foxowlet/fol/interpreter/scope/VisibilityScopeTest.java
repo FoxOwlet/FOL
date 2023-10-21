@@ -5,8 +5,8 @@ import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VisibilityScopeTest extends AbstractInterpreterTest {
     @Test
@@ -20,7 +20,7 @@ public class VisibilityScopeTest extends AbstractInterpreterTest {
                 var("a", "Int", literal(10)),
                 inner);
 
-        assertValue(42, interpret(outer));
+        assertEquals(42, interpret(outer));
     }
 
     @Test
@@ -35,7 +35,7 @@ public class VisibilityScopeTest extends AbstractInterpreterTest {
                 var("a", "Int", literal(40)),
                 inner);
 
-        assertValue(42, interpret(outer));
+        assertEquals(42, interpret(outer));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class VisibilityScopeTest extends AbstractInterpreterTest {
                 var("b", "Int", literal(2)),
                 call(lambda, new Symbol("a"), new Symbol("b")));
 
-        assertValue(42, interpret(block));
+        assertEquals(42, interpret(block));
     }
 
     @Test
@@ -99,6 +99,6 @@ public class VisibilityScopeTest extends AbstractInterpreterTest {
                 var("b", "Int", literal(2)),
                 call(lambda, new Symbol("b"), new Symbol("a")));
 
-        assertValue(42, interpret(block));
+        assertEquals(42, interpret(block));
     }
 }

@@ -10,7 +10,7 @@ import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 public class AdditionInterpreter implements ExpressionInterpreter<Addition> {
     @Override
-    public Object interpret(Addition expression, InterpretationContext context) {
+    public Value interpret(Addition expression, InterpretationContext context) {
         Value left = context.interpret(expression.left(), Value.class);
         Value right = context.interpret(expression.right(), Value.class);
         TypeDescriptor rightType = right.type();

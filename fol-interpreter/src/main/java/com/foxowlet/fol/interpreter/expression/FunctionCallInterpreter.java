@@ -15,7 +15,7 @@ import java.util.List;
 
 public class FunctionCallInterpreter implements ExpressionInterpreter<FunctionCall> {
     @Override
-    public Object interpret(FunctionCall expression, InterpretationContext context) {
+    public Value interpret(FunctionCall expression, InterpretationContext context) {
         Value value = context.interpret(expression.target(), Value.class);
         Callable function = ReflectionUtils.as(value.value(), Callable.class);
         // first convert all the arguments (actuals)
@@ -24,7 +24,7 @@ public class FunctionCallInterpreter implements ExpressionInterpreter<FunctionCa
         checkParameters(function.params(), arguments);
         // then call the function in a fresh scope
         context.enterScope();
-        Object returnValue = function.call(arguments, context);
+        Value returnValue = function.call(arguments, context);
         context.exitScope();
         return returnValue;
     }

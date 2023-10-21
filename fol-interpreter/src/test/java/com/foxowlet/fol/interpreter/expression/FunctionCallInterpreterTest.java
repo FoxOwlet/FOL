@@ -6,8 +6,8 @@ import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.exception.InvalidFunctionCall;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class FunctionCallInterpreterTest extends AbstractInterpreterTest {
@@ -24,7 +24,7 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -34,7 +34,7 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(functionCall);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -46,7 +46,7 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(functionCall);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -59,7 +59,7 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(functionCall);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -74,7 +74,7 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(functionCall);
 
-        assertValue(42, actual);
+        assertEquals(42, actual);
     }
 
     @Test
@@ -87,7 +87,7 @@ class FunctionCallInterpreterTest extends AbstractInterpreterTest {
         // }
         Block block = block(call(lambda, assignment), new Symbol("a"));
 
-        assertValue(42, interpret(block));
+        assertEquals(42, interpret(block));
     }
 
     @Test

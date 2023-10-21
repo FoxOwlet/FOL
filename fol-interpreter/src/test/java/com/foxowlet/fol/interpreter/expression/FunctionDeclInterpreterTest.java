@@ -3,6 +3,7 @@ package com.foxowlet.fol.interpreter.expression;
 import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.ast.FunctionDecl;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
+import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.Variable;
 import com.foxowlet.fol.interpreter.model.type.ByteType;
 import com.foxowlet.fol.interpreter.model.type.IntType;
@@ -37,8 +38,7 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(foo);
 
-        Variable variable = assertInstanceOf(Variable.class, actual);
-        assertFunctionType(variable, new UnitType(), new IntType());
+        assertFunctionType(actual, new UnitType(), new IntType());
     }
 
     @Test
@@ -50,7 +50,6 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(foo);
 
-        Variable variable = assertInstanceOf(Variable.class, actual);
-        assertFunctionType(variable, new LongType(), new ByteType(), new UnitType());
+        assertFunctionType(actual, new LongType(), new ByteType(), new UnitType());
     }
 }

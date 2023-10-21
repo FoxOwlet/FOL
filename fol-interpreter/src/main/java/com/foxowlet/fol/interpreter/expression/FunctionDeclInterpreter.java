@@ -3,10 +3,11 @@ package com.foxowlet.fol.interpreter.expression;
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.internal.TypeUtils;
+import com.foxowlet.fol.interpreter.model.Value;
 
 public class FunctionDeclInterpreter implements ExpressionInterpreter<FunctionDecl> {
     @Override
-    public Object interpret(FunctionDecl expression, InterpretationContext context) {
+    public Value interpret(FunctionDecl expression, InterpretationContext context) {
         Lambda lambda = new Lambda(expression.params(), expression.returnType(), expression.body());
         Type type = createType(expression);
         VarDecl functionSymbol = new VarDecl(expression.name(), type);
