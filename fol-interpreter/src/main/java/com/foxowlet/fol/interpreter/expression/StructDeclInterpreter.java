@@ -7,6 +7,7 @@ import com.foxowlet.fol.ast.Type;
 import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.exception.DuplicateFieldException;
 import com.foxowlet.fol.interpreter.model.Field;
+import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.type.StructType;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 import com.foxowlet.fol.interpreter.type.TypeInterpreter;
@@ -24,7 +25,7 @@ public class StructDeclInterpreter implements ExpressionInterpreter<StructDecl> 
     }
 
     @Override
-    public Object interpret(StructDecl expression, InterpretationContext context) {
+    public Value interpret(StructDecl expression, InterpretationContext context) {
         int offset = 0;
         Set<String> fieldNames = new HashSet<>();
         List<Field> fields = new ArrayList<>();

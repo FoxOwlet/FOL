@@ -2,6 +2,7 @@ package com.foxowlet.fol.ast;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public record NodeSeq<T extends Node>(List<T> subnodes) implements Node, Iterable<T> {
     @Override
@@ -17,5 +18,9 @@ public record NodeSeq<T extends Node>(List<T> subnodes) implements Node, Iterabl
     @Override
     public Iterator<T> iterator() {
         return subnodes.iterator();
+    }
+
+    public Stream<T> stream() {
+        return subnodes.stream();
     }
 }

@@ -3,7 +3,7 @@ package com.foxowlet.fol.interpreter.model.type;
 public class ByteType extends WholeNumberType<Byte> {
 
     public ByteType() {
-        super(Byte.class, "Byte");
+        super("Byte");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.foxowlet.fol.interpreter.model;
+package com.foxowlet.fol.interpreter.model.memory;
 
 public class DummyMemoryLocation implements MemoryLocation {
     @Override

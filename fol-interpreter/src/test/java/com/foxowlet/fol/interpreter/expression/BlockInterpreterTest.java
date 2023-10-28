@@ -4,10 +4,10 @@ import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class BlockTest extends AbstractInterpreterTest {
+class BlockInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldReturnLastExpressionValue() {
@@ -24,6 +24,6 @@ class BlockTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertValue(92, actual);
+        assertEquals(92, actual);
     }
 }

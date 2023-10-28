@@ -1,4 +1,4 @@
-package com.foxowlet.fol.interpreter.model;
+package com.foxowlet.fol.interpreter.model.memory;
 
 import com.foxowlet.fol.emulator.memory.Memory;
 

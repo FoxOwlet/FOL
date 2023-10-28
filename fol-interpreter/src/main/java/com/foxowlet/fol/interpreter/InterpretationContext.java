@@ -3,7 +3,8 @@ package com.foxowlet.fol.interpreter;
 import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.interpreter.exception.TypeException;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
-import com.foxowlet.fol.interpreter.model.MemoryBlock;
+import com.foxowlet.fol.interpreter.model.Value;
+import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 
 public interface InterpretationContext {
     MemoryBlock allocateMemory(int amount);
@@ -16,7 +17,7 @@ public interface InterpretationContext {
 
     Object lookupSymbol(String name);
 
-    Object interpret(Expression expression);
+    Value interpret(Expression expression);
 
     default <T> T interpret(Expression expression, Class<T> tClass) {
         return ReflectionUtils.as(interpret(expression), tClass);

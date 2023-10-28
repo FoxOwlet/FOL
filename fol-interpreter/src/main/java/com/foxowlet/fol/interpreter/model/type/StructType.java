@@ -1,10 +1,11 @@
 package com.foxowlet.fol.interpreter.model.type;
 
 import com.foxowlet.fol.interpreter.InterpretationContext;
+import com.foxowlet.fol.interpreter.internal.BiIterator;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.*;
+import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,15 +24,14 @@ public record StructType(String name, int size, List<Field> fields) implements T
     @Override
     public Value call(List<Value> actuals, InterpretationContext context) {
         MemoryBlock memoryBlock = context.allocateMemory(size);
-        Iterator<Field> fieldsIterator = fields.iterator();
-        Iterator<Value> actualsIterator = actuals.iterator();
-        // assume same length. It's checked by FunctionCallInterpreter before the call
-        while (fieldsIterator.hasNext() && actualsIterator.hasNext()) {
-            Field field = fieldsIterator.next();
-            byte[] encoded = field.type().encode(actualsIterator.next().value());
-            memoryBlock.slice(field.offset(), field.type().size()).write(encoded);
-        }
+        new BiIterator<>(fields, actuals)
+                .forEachRemaining((field, actual) -> assign(memoryBlock, field, actual));
         return new Struct(memoryBlock, this);
+    }
+
+    private void assign(MemoryBlock memoryBlock, Field field, Value actual) {
+        byte[] encoded = field.type().encode(actual.value());
+        memoryBlock.slice(field.offset(), field.type().size()).write(encoded);
     }
 
     @Override
