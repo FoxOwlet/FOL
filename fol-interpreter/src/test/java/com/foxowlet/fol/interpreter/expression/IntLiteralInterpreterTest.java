@@ -4,8 +4,8 @@ import com.foxowlet.fol.ast.Expression;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AstUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertValue;
+import static com.foxowlet.fol.interpreter.AstUtils.literal;
 
 class IntLiteralInterpreterTest extends AbstractInterpreterTest {
     @Test
@@ -14,6 +14,6 @@ class IntLiteralInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(literal);
 
-        assertEquals(42, actual);
+        assertValue(actual).is(42);
     }
 }

@@ -4,9 +4,11 @@ import com.foxowlet.fol.ast.Assignment;
 import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.ast.Lambda;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
+import com.foxowlet.fol.interpreter.model.type.IntType;
+import com.foxowlet.fol.interpreter.model.type.UnitType;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertFunction;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertFunction;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
 
 
@@ -20,7 +22,10 @@ class LambdaInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(lambda);
 
-        assertFunction(body, actual);
+        assertFunction(actual)
+                .hasNoParams()
+                .hasBody(body)
+                .hasReturnType(new IntType());
     }
 
     @Test
@@ -34,7 +39,12 @@ class LambdaInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(assignment);
 
-        assertFunction(body, actual);
+        assertFunction(actual)
+                .hasBody(body)
+                .hasNoParams()
+                .type()
+                .withParam(new UnitType())
+                .returns(new IntType());
     }
 
 }

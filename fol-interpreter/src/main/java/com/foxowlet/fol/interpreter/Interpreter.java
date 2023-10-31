@@ -48,10 +48,10 @@ public class Interpreter {
         this.offset = 0;
     }
 
-    public Object interpret(Expression expression) {
+    public Value interpret(Expression expression) {
         InterpretationContext context = new Context();
         config.getPredefinedProcessor().preprocess(context);
-        return interpret(expression, context).value();
+        return interpret(expression, context);
     }
 
     private Value interpret(Expression expression, InterpretationContext context) {

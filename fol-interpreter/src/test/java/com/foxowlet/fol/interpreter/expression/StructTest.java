@@ -6,7 +6,7 @@ import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertStruct;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertStruct;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
 
 public class StructTest extends AbstractInterpreterTest {
@@ -21,7 +21,8 @@ public class StructTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertStruct(actual, new IntType().encode(42));
+        assertStruct(actual)
+                .hasField(42, new IntType());
     }
 
     @Test
@@ -40,9 +41,9 @@ public class StructTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertStruct(actual,
-                new IntType().encode(42),
-                new IntType().encode(-99));
+        assertStruct(actual)
+                .hasField(42, new IntType())
+                .hasField(-99, new IntType());
     }
 
     @Test
