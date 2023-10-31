@@ -7,9 +7,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        InterpreterConfiguration config = new InterpreterConfiguration()
-                .withMemoryLimit(100_000);
-        Interpreter interpreter = new Interpreter(new Emulator(), config);
+        Interpreter interpreter = new Interpreter(new Emulator());
 
         /*
         def fib(i: Int): Int {
@@ -18,8 +16,12 @@ public class Main {
           else             fib(i + -1) + fib(i + -2)
         }
          */
-        FunctionDecl fib = new FunctionDecl(new Symbol("fib"), NodeSeq.of(
-                new FormalParameter(new Symbol("i"), new ScalarType(new Symbol("Int")))),
+        FunctionDecl fib = new FunctionDecl(
+                new Symbol("fib"),
+                NodeSeq.of(
+                        new FormalParameter(
+                                new Symbol("i"),
+                                new ScalarType(new Symbol("Int")))),
                 new ScalarType(new Symbol("Int")),
                 new Block(NodeSeq.of(
                         new If(
@@ -48,9 +50,13 @@ public class Main {
             }
             // fib(<arg>)
             int arg = Integer.parseInt(line);
-            FunctionCall call = new FunctionCall(new Symbol("fib"), NodeSeq.of(new IntLiteral(arg)));
+            FunctionCall call = new FunctionCall(
+                    new Symbol("fib"),
+                    NodeSeq.of(new IntLiteral(arg)));
 
-            System.out.println(interpreter.interpret(call));
+            Object result = interpreter.interpret(call);
+
+            System.out.printf("fib(%d) = %s%n", arg, result);
         }
     }
 }
