@@ -43,7 +43,7 @@ class LambdaInterpreterTest extends AbstractInterpreterTest {
                 .hasBody(body)
                 .hasNoParams()
                 .type()
-                .withArgument(new UnitType())
+                .withParam(new UnitType())
                 .returns(new IntType());
     }
 

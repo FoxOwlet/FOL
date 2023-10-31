@@ -31,7 +31,6 @@ class StructDeclInterpreterTest extends AbstractInterpreterTest {
         assertStructType(actual)
                 .hasName("Foo")
                 .hasField(0, "i", new IntType())
-                .hasField(0, "i", new IntType())
                 .hasField(4, "j", new IntType())
                 .hasField(8, "k", new IntType());
     }

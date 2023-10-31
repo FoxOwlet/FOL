@@ -53,8 +53,8 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
         assertFunction(actual)
                 .hasReturnType(new UnitType())
                 .type()
-                .withArgument(new LongType())
-                .withArgument(new ByteType())
+                .withParam(new LongType())
+                .withParam(new ByteType())
                 .returns(new UnitType());
     }
 }

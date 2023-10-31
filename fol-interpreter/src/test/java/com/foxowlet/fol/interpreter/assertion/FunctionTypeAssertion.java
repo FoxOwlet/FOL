@@ -15,9 +15,9 @@ public final class FunctionTypeAssertion {
         this.type = type;
     }
 
-    public FunctionTypeAssertion withArgument(TypeDescriptor argType) {
+    public FunctionTypeAssertion withParam(TypeDescriptor paramType) {
         FunctionTypeDescriptor ftype = assertInstanceOf(FunctionTypeDescriptor.class, type);
-        assertEquals(argType, ftype.argumentType());
+        assertEquals(paramType, ftype.argumentType());
         type = ftype.returnType();
         return this;
     }
