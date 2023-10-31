@@ -6,9 +6,9 @@ import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
 import com.foxowlet.fol.interpreter.exception.TypeException;
 import org.junit.jupiter.api.Test;
 
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.literal;
 import static com.foxowlet.fol.interpreter.AstUtils.var;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AssignmentInterpreterTest extends AbstractInterpreterTest {
 
@@ -19,7 +19,7 @@ class AssignmentInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(assignment);
 
-        assertEquals(42, actual);
+        assertValue(actual).is(42);
     }
 
     @Test

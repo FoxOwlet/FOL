@@ -8,9 +8,9 @@ import com.foxowlet.fol.interpreter.exception.DuplicateSymbolException;
 import com.foxowlet.fol.interpreter.exception.UndefinedSymbolException;
 import org.junit.jupiter.api.Test;
 
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.block;
 import static com.foxowlet.fol.interpreter.AstUtils.var;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VarDeclInterpreterTest extends AbstractInterpreterTest {
 
@@ -21,7 +21,7 @@ class VarDeclInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(varDecl);
 
-        assertEquals(0L, actual);
+        assertValue(actual).is(0L);
     }
 
     @Test

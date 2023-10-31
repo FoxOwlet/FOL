@@ -1,11 +1,14 @@
 package com.foxowlet.fol.interpreter.expression;
 
-import com.foxowlet.fol.ast.*;
+import com.foxowlet.fol.ast.Addition;
+import com.foxowlet.fol.ast.Assignment;
+import com.foxowlet.fol.ast.Expression;
+import com.foxowlet.fol.ast.Symbol;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import org.junit.jupiter.api.Test;
 
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BlockInterpreterTest extends AbstractInterpreterTest {
 
@@ -24,6 +27,6 @@ class BlockInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertEquals(92, actual);
+        assertValue(actual).is(92);
     }
 }

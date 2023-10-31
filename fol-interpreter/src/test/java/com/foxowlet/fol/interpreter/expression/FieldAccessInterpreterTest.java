@@ -6,9 +6,9 @@ import com.foxowlet.fol.interpreter.exception.UnresolvedFieldException;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertStruct;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertStruct;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertValue;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FieldAccessInterpreterTest extends AbstractInterpreterTest {
     @Test
@@ -27,7 +27,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertEquals(42, actual);
+        assertValue(actual).is(42);
     }
 
     @Test
@@ -50,7 +50,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertEquals(99, actual);
+        assertValue(actual).is(99);
     }
 
     @Test
@@ -73,9 +73,9 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertStruct(actual,
-                new IntType().encode(42),
-                new IntType().encode(99));
+        assertStruct(actual)
+                .hasField(42, new IntType())
+                .hasField(99, new IntType());
     }
 
     @Test
@@ -93,7 +93,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertEquals(42, actual);
+        assertValue(actual).is(42);
     }
 
     @Test
@@ -117,7 +117,7 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(block);
 
-        assertEquals(52, actual);
+        assertValue(actual).is(52);
     }
 
     @Test

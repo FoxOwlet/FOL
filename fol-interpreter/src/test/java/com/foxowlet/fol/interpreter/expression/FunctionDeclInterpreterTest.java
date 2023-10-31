@@ -3,20 +3,14 @@ package com.foxowlet.fol.interpreter.expression;
 import com.foxowlet.fol.ast.Block;
 import com.foxowlet.fol.ast.FunctionDecl;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
-import com.foxowlet.fol.interpreter.model.Value;
-import com.foxowlet.fol.interpreter.model.Variable;
 import com.foxowlet.fol.interpreter.model.type.ByteType;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import com.foxowlet.fol.interpreter.model.type.LongType;
 import com.foxowlet.fol.interpreter.model.type.UnitType;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertFunction;
-import static com.foxowlet.fol.interpreter.AssertionUtils.assertFunctionType;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertFunction;
 import static com.foxowlet.fol.interpreter.AstUtils.*;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
     @Test
@@ -27,7 +21,10 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(foo);
 
-        assertFunction(List.of(), new UnitType(), body, actual);
+        assertFunction(actual)
+                .hasBody(body)
+                .hasNoParams()
+                .hasReturnType(new UnitType());
     }
 
     @Test
@@ -38,7 +35,10 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(foo);
 
-        assertFunctionType(actual, new UnitType(), new IntType());
+        assertFunction(actual)
+                .hasBody(body)
+                .hasNoParams()
+                .hasReturnType(new IntType());
     }
 
     @Test
@@ -50,6 +50,11 @@ class FunctionDeclInterpreterTest extends AbstractInterpreterTest {
 
         Object actual = interpret(foo);
 
-        assertFunctionType(actual, new LongType(), new ByteType(), new UnitType());
+        assertFunction(actual)
+                .hasReturnType(new UnitType())
+                .type()
+                .withArgument(new LongType())
+                .withArgument(new ByteType())
+                .returns(new UnitType());
     }
 }
