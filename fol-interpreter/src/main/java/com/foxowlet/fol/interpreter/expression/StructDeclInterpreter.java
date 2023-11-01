@@ -2,7 +2,6 @@ package com.foxowlet.fol.interpreter.expression;
 
 import com.foxowlet.fol.ast.FieldDecl;
 import com.foxowlet.fol.ast.StructDecl;
-import com.foxowlet.fol.ast.Symbol;
 import com.foxowlet.fol.ast.Type;
 import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.exception.DuplicateFieldException;
@@ -29,7 +28,9 @@ public class StructDeclInterpreter implements ExpressionInterpreter<StructDecl> 
         int offset = 0;
         Set<String> fieldNames = new HashSet<>();
         List<Field> fields = new ArrayList<>();
-        for (FieldDecl(Symbol(String name), Type rawType) : expression.fields()) {
+        for (FieldDecl fieldDecl : expression.fields()) {
+            String name = fieldDecl.name().name();
+            Type rawType = fieldDecl.type();
             if (fieldNames.contains(name)) {
                 throw new DuplicateFieldException(name, expression.name().name());
             }
