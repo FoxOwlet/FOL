@@ -34,6 +34,11 @@ public class MemoryBlock implements MemoryLocation {
         return new MemoryBlock(memory, address + offset, size);
     }
 
+    @Override
+    public int address() {
+        return address;
+    }
+
     private void checkSize(byte[] data) {
         if (data.length != size) {
             throw new IllegalStateException("Memory block size mismatch, expected %d, got %d"

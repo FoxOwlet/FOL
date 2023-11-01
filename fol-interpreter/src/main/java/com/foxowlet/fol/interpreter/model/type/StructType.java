@@ -26,7 +26,7 @@ public record StructType(String name, int size, List<Field> fields) implements T
         MemoryBlock memoryBlock = context.allocateMemory(size);
         new BiIterator<>(fields, actuals)
                 .forEachRemaining((field, actual) -> assign(memoryBlock, field, actual));
-        return new Struct(memoryBlock, this);
+        return new Container(memoryBlock.address(), context.makeRef(this));
     }
 
     private void assign(MemoryBlock memoryBlock, Field field, Value actual) {

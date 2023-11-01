@@ -6,4 +6,6 @@ public interface MemoryLocation {
     void write(byte[] data);
 
     MemoryLocation slice(int offset, int size);
+
+    int address();
 }

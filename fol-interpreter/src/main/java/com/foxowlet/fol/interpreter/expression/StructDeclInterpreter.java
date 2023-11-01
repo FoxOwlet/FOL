@@ -7,6 +7,7 @@ import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.exception.DuplicateFieldException;
 import com.foxowlet.fol.interpreter.model.Field;
 import com.foxowlet.fol.interpreter.model.Value;
+import com.foxowlet.fol.interpreter.model.type.RefType;
 import com.foxowlet.fol.interpreter.model.type.StructType;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 import com.foxowlet.fol.interpreter.type.TypeInterpreter;
@@ -41,7 +42,8 @@ public class StructDeclInterpreter implements ExpressionInterpreter<StructDecl> 
             fields.add(field);
         }
         StructType type = new StructType(expression.name().name(), offset, fields);
-        context.registerSymbol(type.name(), type);
-        return type;
+        RefType refType = context.makeRef(type);
+        context.registerSymbol(type.name(), refType);
+        return refType;
     }
 }

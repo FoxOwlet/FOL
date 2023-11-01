@@ -15,4 +15,9 @@ public class DummyMemoryLocation implements MemoryLocation {
     public MemoryLocation slice(int offset, int size) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public int address() {
+        throw new UnsupportedOperationException();
+    }
 }

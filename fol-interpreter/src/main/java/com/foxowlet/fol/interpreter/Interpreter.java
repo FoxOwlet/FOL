@@ -7,6 +7,8 @@ import com.foxowlet.fol.interpreter.expression.*;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
+import com.foxowlet.fol.interpreter.model.type.RefType;
+import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 import com.foxowlet.fol.interpreter.scope.LookupScope;
 
 import java.util.HashMap;
@@ -111,6 +113,11 @@ public class Interpreter {
         @Override
         public int allocateFunction() {
             return ++functionId;
+        }
+
+        @Override
+        public RefType makeRef(TypeDescriptor type) {
+            return new RefType(memory, type);
         }
     }
 }
