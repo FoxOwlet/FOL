@@ -5,6 +5,7 @@ import com.foxowlet.fol.interpreter.InterpretationContext;
 import com.foxowlet.fol.interpreter.exception.TypeException;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Callable;
+import com.foxowlet.fol.interpreter.model.Container;
 import com.foxowlet.fol.interpreter.model.FunctionParameter;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
@@ -46,7 +47,8 @@ public final class RefType implements TypeDescriptor, Callable {
 
     @Override
     public Value call(List<Value> actuals, InterpretationContext context) {
-        return asCallable().call(actuals, context);
+        Value result = asCallable().call(actuals, context);
+        return new Container(result.memory().address(), context.makeRef(result.type()));
     }
 
     @Override
