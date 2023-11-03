@@ -59,8 +59,7 @@ public final class RefType implements TypeDescriptor, Callable {
     }
 
     public Object deref(Object value) {
-        byte[] bytes = new byte[pointedType.size()];
-        pointedMemory(value).read(bytes);
+        byte[] bytes = pointedMemory(value).read();
         return pointedType.decode(bytes);
     }
 

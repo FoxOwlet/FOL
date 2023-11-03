@@ -14,6 +14,13 @@ public class MemoryBlock implements MemoryLocation {
     }
 
     @Override
+    public byte[] read() {
+        byte[] data = new byte[size];
+        memory.read(address, data);
+        return data;
+    }
+
+    @Override
     public void read(byte[] data) {
         checkSize(data);
         memory.read(address, data);
