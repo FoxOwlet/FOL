@@ -5,6 +5,8 @@ import com.foxowlet.fol.interpreter.exception.TypeException;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
+import com.foxowlet.fol.interpreter.model.type.RefType;
+import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 public interface InterpretationContext {
     MemoryBlock allocateMemory(int amount);
@@ -28,4 +30,6 @@ public interface InterpretationContext {
     }
 
     int allocateFunction();
+
+    RefType makeRef(TypeDescriptor type);
 }

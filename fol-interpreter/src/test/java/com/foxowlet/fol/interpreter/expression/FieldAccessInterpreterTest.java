@@ -4,6 +4,7 @@ import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import com.foxowlet.fol.interpreter.exception.UnresolvedFieldException;
 import com.foxowlet.fol.interpreter.model.type.IntType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertStruct;
@@ -134,5 +135,60 @@ class FieldAccessInterpreterTest extends AbstractInterpreterTest {
         Block block = block(decl, var, field);
 
         assertError(UnresolvedFieldException.class, block);
+    }
+
+    @Test
+    @Disabled("pass-by-value semantic is now deprecated")
+    void shouldReadOldValue_whenPassedIntoFunctionByValue() {
+        // struct Foo(i: Int)
+        StructDecl decl = new StructDecl(new Symbol("Foo"), NodeSeq.of(
+                field("i", "Int")));
+        // var foo: Foo = Foo(10)
+        Assignment var = var("foo", "Foo",
+                call(new Symbol("Foo"), literal(10)));
+        // def bar(foo: Foo): Int { foo.i = 42 }
+        FunctionDecl bar = fdecl("bar", "Int",
+                block(new Assignment(
+                        fieldAccess("foo", "i"),
+                        literal(42))),
+                formal("foo", "Foo"));
+        // bar(foo)
+        FunctionCall call = call(new Symbol("bar"), new Symbol("foo"));
+        // foo.i
+        FieldAccess field = fieldAccess("foo", "i");
+        // { ... }
+        Block block = block(decl, var, bar, call, field);
+
+        Object actual = interpret(block);
+
+        assertValue(actual).is(10);
+    }
+
+    @Test
+    void shouldUpdateOldValue_whenPassedIntoFunctionByReference() {
+        // struct Foo(i: Int)
+        StructDecl decl = new StructDecl(new Symbol("Foo"), NodeSeq.of(
+                field("i", "Int")));
+        // var i: Int = 99
+        Assignment i = var("i", "Int", literal(99));
+        // var foo: Foo = Foo(10)
+        Assignment foo = var("foo", "Foo",
+                call(new Symbol("Foo"), literal(10)));
+        // def bar(foo: Foo): Int { foo.i = 42 }
+        FunctionDecl bar = fdecl("bar", "Int",
+                block(new Assignment(
+                        fieldAccess("foo", "i"),
+                        literal(42))),
+                formal("foo", "Foo"));
+        // bar(foo)
+        FunctionCall call = call(new Symbol("bar"), new Symbol("foo"));
+        // foo.i
+        FieldAccess field = fieldAccess("foo", "i");
+        // { ... }
+        Block block = block(decl, i, foo, bar, call, field);
+
+        Object actual = interpret(block);
+
+        assertValue(actual).is(42);
     }
 }

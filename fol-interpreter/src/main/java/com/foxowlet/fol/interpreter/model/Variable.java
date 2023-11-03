@@ -6,8 +6,7 @@ import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 public record Variable(MemoryLocation memory, String name, TypeDescriptor type) implements Value {
     @Override
     public Object value() {
-        byte[] data = new byte[type.size()];
-        memory.read(data);
+        byte[] data = memory.read();
         return type.decode(data);
     }
 
