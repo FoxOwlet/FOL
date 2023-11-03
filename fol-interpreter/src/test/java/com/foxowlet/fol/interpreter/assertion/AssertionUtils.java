@@ -27,7 +27,7 @@ public final class AssertionUtils {
     public static StructAssertion assertStruct(Object actual) {
         Value value = asValue(actual);
         RefType refType = assertInstanceOf(RefType.class, value.type());
-        byte[] struct = assertInstanceOf(byte[].class, refType.deref(value.value()));
+        byte[] struct = assertInstanceOf(byte[].class, value.deref());
         StructType type = assertInstanceOf(StructType.class, refType.pointedType());
         return new StructAssertion(struct, type);
     }
