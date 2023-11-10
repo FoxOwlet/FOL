@@ -20,6 +20,7 @@ public class Interpreter {
 
     static {
         List.of(
+                new FileInterpreter(),
                 new VarDeclInterpreter(),
                 new SymbolInterpreter(),
                 new AssignmentInterpreter(),
@@ -28,6 +29,7 @@ public class Interpreter {
                 new ByteLiteralInterpreter(),
                 new LongLiteralInterpreter(),
                 new AdditionInterpreter(),
+                new MultiplicationInterpreter(),
                 new LambdaInterpreter(),
                 new FunctionCallInterpreter(),
                 new FunctionDeclInterpreter(),
