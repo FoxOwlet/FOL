@@ -30,7 +30,7 @@ expression returns[Expression expr]
            | function_decl {$expr = $function_decl.expr;}
            | struct_decl {$expr = $struct_decl.expr;}
            | lambda_call {$expr = $lambda_call.expr;}
-           | symbol_usage {$expr = $symbol_usage.expr;}
+           | usage_chain {$expr = $usage_chain.expr;}
            | symbol {$expr = $symbol.expr;}
            | literal {$expr = $literal.expr;}
            | assignment {$expr = $assignment.expr;}
@@ -50,7 +50,8 @@ assignment returns[Assignment expr]
            ;
 assignment_target returns[Expression expr]
                   : var_decl {$expr = $var_decl.expr;}
-                  | symbol_usage {$expr = $symbol_usage.expr;}
+                  // TODO: techinally, function call can't be an assignment target
+                  | usage_chain {$expr = $usage_chain.expr;}
                   | symbol {$expr = $symbol.expr;}
                   ;
 block returns[Block expr]
@@ -88,8 +89,12 @@ field_decl returns[FieldDecl decl]
 
 // function_call : (symbol | function_call | lambda) '(' arguments ')';
 // field_access : (symbol | function_call ) ('.' symbol)+;
-symbol_usage returns[Expression expr]
-             : symbol ctxs+=usage+ {$expr = reduceUsage($symbol.expr, $ctxs, ctx -> ctx.fn);}
+usage_chain returns[Expression expr]
+             : usage_target ctxs+=usage+ {$expr = reduceUsage($usage_target.expr, $ctxs, ctx -> ctx.fn);}
+             ;
+usage_target returns[Expression expr]
+             : symbol {$expr = $symbol.expr;}
+             | lambda_call {$expr = $lambda_call.expr;}
              ;
 usage returns[Function<Expression, Expression> fn]
       : '(' arguments ')' {var exprs = $arguments.exprs; $fn = e -> new FunctionCall(e, exprs);} # function_call
@@ -110,7 +115,7 @@ arithmetic_term returns[Expression expr]
                 ;
 arithmetic_factor returns[Expression expr]
                   : lambda_call {$expr = $lambda_call.expr;}
-                  | symbol_usage {$expr = $symbol_usage.expr;}
+                  | usage_chain {$expr = $usage_chain.expr;}
                   | symbol {$expr = $symbol.expr;}
                   | literal {$expr = $literal.expr;}
                   | '(' expression ')' {$expr = $expression.expr;}
