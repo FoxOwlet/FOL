@@ -89,7 +89,7 @@ field_decl returns[FieldDecl decl]
 // function_call : (symbol | function_call | lambda) '(' arguments ')';
 // field_access : (symbol | function_call ) ('.' symbol)+;
 symbol_usage returns[Expression expr]
-             : symbol fns+=usage+ {$expr = reduceUsage($symbol.expr, $fns, ctx -> ctx.fn);}
+             : symbol ctxs+=usage+ {$expr = reduceUsage($symbol.expr, $ctxs, ctx -> ctx.fn);}
              ;
 usage returns[Function<Expression, Expression> fn]
       : '(' arguments ')' {var exprs = $arguments.exprs; $fn = e -> new FunctionCall(e, exprs);} # function_call
