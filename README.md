@@ -21,7 +21,7 @@ Representation of the machine operations of the fol-emulator's CPU model.
 
 ## FOL grammar
 
-TBD
+See [fol.g4](fol-ir/src/main/antlr4/com/foxowlet/fol/parser/antlr/fol.g4) file for the [ANTLR4](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md) grammar.
 
 ## Syntax example
 
@@ -35,7 +35,7 @@ class Fox {
   val name: String
   var age: Int = 10
 
-  constructor(name: String = "fox", age: Int) default // assign values to fields with matching names
+  constructor(name: String, age: Int) default // assign values to fields with matching names
 
   constructor(kw: Keyword) {
     val name: String = kw.name()
@@ -44,42 +44,36 @@ class Fox {
   }
 
   def fromJson(json: String): Fox {
-    val obj: Map<String, Any> = read(json)
-    Fox(obj["name"], obj["age"])
+    val obj: Map[String, Any] = read(json) ;; generics with [T] syntax
+    Fox(obj("name"), obj("age")) ;; Map is treated as a function from key to value
   }
 }
 
 // literals for sequences/collections
-val names: String[] = ["foo" "bar" "buz"]
-val map: Map<String, Int> = {"a": 1, "b": 2}
-val set: Set<Int> = #{1 2 3}
+val names: Seq[String] = ["foo" "bar" "buz"]
+val map: Map[String, Int] = {"a": 1, "b": 2}
+val set: Set[Int] = #{1 2 3}
 
 def genFox(): Fox {
-  val name: String = names[random.int(names.size())]
+  val name: String = names(random.int(names.size())) ;; Seq is treated as a function from Int index to value
   val age: Int = random.int(20)
   Fox(age: age, name: name)
 }
 
 def syntaxTest(): Unit->Unit { // returns no-args function that returns nothing
-  for (i : range(10)) { // loop over sequence
+  for (i : range(10)) { // loop over sequence, i var is created implicitly
     when (i > 5) println("foo")
-    println(if (i == 3) "three" else i.toString()) // if is an expression
-    try
-      i / 0
-    catch e: Exception
-      println("oops")
-    finally
-      println("finally")
-    #(x: Int){println(x)}(x=12) // declare lambda and call it
+    println(if (i == 3) "three" else i.str()) // if is an expression
+    #(x: Int){println(x)}(x: 12) // declare lambda and call it
     #(){println(10)} // return no-arg lambda
   }
 }
 
-def withVarargs(& ints: Int[]): Unit { // varargs declared with the & syntax
+def withVarargs(& ints: Seq[Int]): Unit { // varargs declared with the & syntax
   println(ints.size())
 }
 withVarargs(1,2,3) // pass varargs explicitly
 withVarargs(...[1,2,3]) // pass collection as varargs, same as withVarargs(1,2,3)
 
-println(...{:obj 42}) // same as println(obj=42)
+println(...{:obj 42}) // same as println(obj: 42)
 ```
