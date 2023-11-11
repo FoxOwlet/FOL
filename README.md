@@ -50,7 +50,7 @@ class Fox {
 }
 
 // literals for sequences/collections
-val names: String[] = ["foo" "bar" "buz"] ;; String[] is alias for Seq[String]
+val names: Seq[String] = ["foo" "bar" "buz"]
 val map: Map[String, Int] = {"a": 1, "b": 2}
 val set: Set[Int] = #{1 2 3}
 
@@ -69,7 +69,7 @@ def syntaxTest(): Unit->Unit { // returns no-args function that returns nothing
   }
 }
 
-def withVarargs(& ints: Int[]): Unit { // varargs declared with the & syntax
+def withVarargs(& ints: Seq[Int]): Unit { // varargs declared with the & syntax
   println(ints.size())
 }
 withVarargs(1,2,3) // pass varargs explicitly
