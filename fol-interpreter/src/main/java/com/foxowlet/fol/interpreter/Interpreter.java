@@ -31,6 +31,7 @@ public class Interpreter {
                 new AdditionInterpreter(),
                 new SubtractionInterpreter(),
                 new MultiplicationInterpreter(),
+                new DivisionInterpreter(),
                 new LambdaInterpreter(),
                 new FunctionCallInterpreter(),
                 new FunctionDeclInterpreter(),

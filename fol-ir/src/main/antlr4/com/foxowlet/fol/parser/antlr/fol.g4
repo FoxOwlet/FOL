@@ -126,6 +126,7 @@ arithmetic_expression returns[Expression expr]
                       ;
 arithmetic_term returns[Expression expr]
                 : multiplication {$expr = $multiplication.expr;}
+                | division {$expr = $division.expr;}
                 | arithmetic_factor {$expr = $arithmetic_factor.expr;}
                 ;
 arithmetic_factor returns[Expression expr]
@@ -143,6 +144,11 @@ subtraction returns[Expression expr]
 addition returns[Expression expr]
          : arithmetic_term '+' expression {$expr = new Addition($arithmetic_term.expr, $expression.expr);}
          ;
+
+division returns[Expression expr]
+         : arithmetic_factor '/' expression {$expr = new Division($arithmetic_factor.expr, $expression.expr); }
+         ;
+
 multiplication returns[Expression expr]
          : arithmetic_factor '*' expression {$expr = new Multiplication($arithmetic_factor.expr, $expression.expr);}
          ;

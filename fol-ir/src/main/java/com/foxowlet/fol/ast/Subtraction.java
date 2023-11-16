@@ -1,4 +1,4 @@
 package com.foxowlet.fol.ast;
 
-public record Subtraction(Expression left, Expression right) implements ArithmeticExpression {
+public record Subtraction(Expression left, Expression right) implements ArithmeticExpression, BiOperation {
 }
