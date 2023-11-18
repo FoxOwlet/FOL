@@ -5,9 +5,7 @@ import com.foxowlet.fol.parser.AntlrParser;
 
 public class Main {
     public static void main(String[] args) {
-        InterpreterConfiguration config = new InterpreterConfiguration()
-                .withMemoryLimit(100_000);
-        Interpreter interpreter = new Interpreter(new Emulator(), config);
+        Interpreter interpreter = new Interpreter(new Emulator());
         AntlrParser parser = new AntlrParser();
         String input = """
                 def factorial(n: Int): Int {
