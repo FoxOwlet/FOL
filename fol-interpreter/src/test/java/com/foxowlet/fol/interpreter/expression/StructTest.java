@@ -3,11 +3,17 @@ package com.foxowlet.fol.interpreter.expression;
 import com.foxowlet.fol.ast.*;
 import com.foxowlet.fol.interpreter.AbstractInterpreterTest;
 import com.foxowlet.fol.interpreter.exception.IncompatibleTypeException;
+import com.foxowlet.fol.interpreter.model.Field;
+import com.foxowlet.fol.interpreter.model.FunctionParameter;
 import com.foxowlet.fol.interpreter.model.type.IntType;
+import com.foxowlet.fol.interpreter.model.type.StructType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertStruct;
+import java.util.List;
+
 import static com.foxowlet.fol.interpreter.AstUtils.*;
+import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.*;
 
 public class StructTest extends AbstractInterpreterTest {
     @Test
@@ -57,5 +63,26 @@ public class StructTest extends AbstractInterpreterTest {
         Block block = block(struct, call);
 
         assertError(IncompatibleTypeException.class, block);
+    }
+
+    @Disabled("TODO: fixme")
+    @Test
+    void structType_shouldBeAssignableIntoVariable() {
+        // struct Foo(i: Int)
+        StructDecl struct = new StructDecl(new Symbol("Foo"), NodeSeq.of(
+                field("i", "Int")));
+        // var f: Int->Foo = Foo;
+        Assignment var = var("f", ftype("Int", "Foo"), new Symbol("Foo"));
+        // { ... }
+        Block block = block(struct, var);
+
+
+        Object actual = interpret(block);
+
+        IntType fieldType = new IntType();
+        assertFunction(actual)
+                .hasParams(new FunctionParameter("i", fieldType))
+                .hasReturnType(new StructType("Foo", fieldType.size(), List.of(
+                        new Field(0, "i", fieldType))));
     }
 }

@@ -29,12 +29,16 @@ public class Interpreter {
                 new ByteLiteralInterpreter(),
                 new LongLiteralInterpreter(),
                 new AdditionInterpreter(),
+                new SubtractionInterpreter(),
                 new MultiplicationInterpreter(),
+                new DivisionInterpreter(),
                 new LambdaInterpreter(),
                 new FunctionCallInterpreter(),
                 new FunctionDeclInterpreter(),
                 new StructDeclInterpreter(),
-                new FieldAccessInterpreter()
+                new FieldAccessInterpreter(),
+                new IfInterpreter(),
+                new EqualsInterpreter()
         ).forEach(Interpreter::register);
     }
 

@@ -1,6 +1,7 @@
 package com.foxowlet.fol.parser;
 
 import com.foxowlet.fol.ast.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -199,6 +200,60 @@ class AntlrParserTest {
                         NodeSeq.of(
                                 new FieldDecl(new Symbol("a"), new ScalarType(new Symbol("Int"))),
                                 new FieldDecl(new Symbol("b"), new ScalarType(new Symbol("Long"))))));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldParseFunctionCallSum() {
+        Expression actual = parser.parse("foo() + bar()");
+
+        File expected = makeFile(
+                new Addition(
+                        new FunctionCall(new Symbol("foo"), NodeSeq.of()),
+                        new FunctionCall(new Symbol("bar"), NodeSeq.of())));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldParseIfChain() {
+        Expression actual = parser.parse("if (a) 1 else if (b) {2} else {3 4}");
+
+        File expected = makeFile(
+                new If(
+                        new Symbol("a"),
+                        new IntLiteral(1),
+                        new If(
+                                new Symbol("b"),
+                                new Block(NodeSeq.of(new IntLiteral(2))),
+                                new Block(NodeSeq.of(new IntLiteral(3), new IntLiteral(4))))));
+
+        assertEquals(expected, actual);
+    }
+
+    @Disabled("TODO: fix grammar")
+    @Test
+    void shouldParseEqualsChain_withLeftAssociativity() {
+        Expression actual = parser.parse("a == b == c");
+
+        File expected = makeFile(
+                new Equals(
+                        new Equals(new Symbol("a"), new Symbol("b")),
+                        new Symbol("c")));
+
+        assertEquals(expected, actual);
+    }
+
+    @Disabled("TODO: fix grammar")
+    @Test
+    void shouldParseSubtractionChain_withLeftAssociativity() {
+        Expression actual = parser.parse("1 - 2 - 3");
+
+        File expected = makeFile(
+                new Subtraction(
+                        new Subtraction(new IntLiteral(1), new IntLiteral(2)),
+                        new IntLiteral(3)));
 
         assertEquals(expected, actual);
     }

@@ -10,7 +10,8 @@ public class PredefinedPreprocessor implements ContextPreprocessor {
 
     public PredefinedPreprocessor() {
         processors = List.of(
-                new PredefinedTypes()
+                new PredefinedTypes(),
+                new PredefinedFunctions()
         );
     }
 

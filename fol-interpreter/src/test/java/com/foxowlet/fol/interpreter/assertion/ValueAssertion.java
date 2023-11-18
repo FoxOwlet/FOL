@@ -1,6 +1,7 @@
 package com.foxowlet.fol.interpreter.assertion;
 
 import com.foxowlet.fol.interpreter.model.Value;
+import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,7 +12,13 @@ public final class ValueAssertion {
         this.value = value;
     }
 
-    public void is(Object expected) {
+    public ValueAssertion is(Object expected) {
         assertEquals(expected, value.value());
+        return this;
+    }
+
+    public ValueAssertion hasType(TypeDescriptor type) {
+        assertEquals(type, value.type());
+        return this;
     }
 }

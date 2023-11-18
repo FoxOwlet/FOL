@@ -11,7 +11,7 @@ import static com.foxowlet.fol.interpreter.AstUtils.literal;
 class AdditionInterpreterTest extends AbstractInterpreterTest {
     @Test
     void shouldAddTwoIntegers() {
-        // 42 + 10
+        // 32 + 10
         Addition addition = new Addition(literal(32), literal(10));
 
         Object actual = interpret(addition);
@@ -31,7 +31,7 @@ class AdditionInterpreterTest extends AbstractInterpreterTest {
 
     @Test
     void shouldAddTwoBytes() {
-        // 32b + 32b
+        // 32b + 10b
         Addition addition = new Addition(literal((byte) 32), literal((byte) 10L));
 
         Object actual = interpret(addition);

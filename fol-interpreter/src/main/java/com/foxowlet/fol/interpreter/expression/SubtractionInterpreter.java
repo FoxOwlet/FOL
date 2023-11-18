@@ -1,11 +1,11 @@
 package com.foxowlet.fol.interpreter.expression;
 
-import com.foxowlet.fol.ast.Multiplication;
+import com.foxowlet.fol.ast.Subtraction;
 import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Value;
 
-public class MultiplicationInterpreter extends BiOperationInterpreter<Multiplication, Double>
-        implements ExpressionInterpreter<Multiplication> {
+public class SubtractionInterpreter extends BiOperationInterpreter<Subtraction, Double>
+        implements ExpressionInterpreter<Subtraction> {
     @Override
     protected Double value(Value value) {
         return ReflectionUtils.as(value.value(), Number.class).doubleValue();
@@ -13,6 +13,6 @@ public class MultiplicationInterpreter extends BiOperationInterpreter<Multiplica
 
     @Override
     protected Double op(Double left, Double right) {
-        return left * right;
+        return left - right;
     }
 }

@@ -14,7 +14,8 @@ public class PredefinedTypes implements ContextPreprocessor {
                 new ByteType(),
                 new IntType(),
                 new LongType(),
-                new UnitType()
+                new UnitType(),
+                new BooleanType()
         );
     }
 
