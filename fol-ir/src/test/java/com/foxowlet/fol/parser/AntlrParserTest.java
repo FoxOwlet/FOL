@@ -234,7 +234,7 @@ class AntlrParserTest {
 
     @Disabled("TODO: fix grammar")
     @Test
-    void shouldParseEqualsChain_withLeftPriority() {
+    void shouldParseEqualsChain_withLeftAssociativity() {
         Expression actual = parser.parse("a == b == c");
 
         File expected = makeFile(
@@ -247,12 +247,12 @@ class AntlrParserTest {
 
     @Disabled("TODO: fix grammar")
     @Test
-    void shouldParseAdditionChain_withLeftPriority() {
-        Expression actual = parser.parse("1 + 2 + 3");
+    void shouldParseSubtractionChain_withLeftAssociativity() {
+        Expression actual = parser.parse("1 - 2 - 3");
 
         File expected = makeFile(
-                new Addition(
-                        new Addition(new IntLiteral(1), new IntLiteral(2)),
+                new Subtraction(
+                        new Subtraction(new IntLiteral(1), new IntLiteral(2)),
                         new IntLiteral(3)));
 
         assertEquals(expected, actual);
