@@ -9,7 +9,6 @@ import com.foxowlet.fol.interpreter.model.memory.MemoryLocation;
 import com.foxowlet.fol.interpreter.model.type.FunctionTypeDescriptor;
 import com.foxowlet.fol.interpreter.model.type.IntType;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
-import com.foxowlet.fol.interpreter.model.type.UnitType;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public final class Print implements PredefinedFunction {
         }
         Value arg = actuals.get(0);
         System.out.println(arg.value());
-        return null;
+        return arg;
     }
 
     @Override
@@ -42,7 +41,7 @@ public final class Print implements PredefinedFunction {
 
     @Override
     public TypeDescriptor type() {
-        return new FunctionTypeDescriptor(context, new IntType(), new UnitType());
+        return new FunctionTypeDescriptor(context, new IntType(), new IntType());
     }
 
     @Override

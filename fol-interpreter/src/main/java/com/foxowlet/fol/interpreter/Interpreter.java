@@ -56,10 +56,14 @@ public class Interpreter {
         this.offset = 0;
     }
 
-    public Value interpret(Expression expression) {
+    public Session startSession() {
         InterpretationContext context = new Context();
         config.getPredefinedProcessor().preprocess(context);
-        return interpret(expression, context);
+        return new Session(context);
+    }
+
+    public Value interpret(Expression expression) {
+        return startSession().interpret(expression);
     }
 
     private Value interpret(Expression expression, InterpretationContext context) {
@@ -124,6 +128,18 @@ public class Interpreter {
         @Override
         public RefType makeRef(TypeDescriptor type) {
             return new RefType(memory, type);
+        }
+    }
+
+    public static class Session {
+        private final InterpretationContext context;
+
+        private Session(InterpretationContext context) {
+            this.context = context;
+        }
+
+        public Value interpret(Expression expression) {
+            return context.interpret(expression);
         }
     }
 }
