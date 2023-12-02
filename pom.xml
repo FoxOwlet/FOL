@@ -6,7 +6,7 @@
 
     <groupId>com.foxowlet</groupId>
     <artifactId>fol-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -41,17 +41,17 @@
             <dependency>
                 <groupId>com.foxowlet</groupId>
                 <artifactId>fol-emulator</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.1.0</version>
             </dependency>
             <dependency>
                 <groupId>com.foxowlet</groupId>
                 <artifactId>fol-ir</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.1.0</version>
             </dependency>
             <dependency>
                 <groupId>com.foxowlet</groupId>
                 <artifactId>fol-interpreter</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>0.1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
