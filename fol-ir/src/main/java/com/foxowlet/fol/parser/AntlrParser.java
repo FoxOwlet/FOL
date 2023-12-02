@@ -7,12 +7,22 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-public class AntlrParser {
-    public Expression parse(String input) {
-        CodePointCharStream stream = CharStreams.fromString(input);
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Optional;
+
+public class AntlrParser implements FolParser {
+    @Override
+    public Optional<Expression> parse(Reader reader) throws IOException {
+        CodePointCharStream stream = CharStreams.fromReader(reader);
         folLexer folLexer = new folLexer(stream);
         CommonTokenStream tokenStream = new CommonTokenStream(folLexer);
         folParser parser = new folParser(tokenStream);
-        return parser.file().expr;
+        Expression expr = parser.file().expr;
+        if (parser.getNumberOfSyntaxErrors() > 0) {
+            return Optional.empty();
+        }
+        return Optional.of(expr);
     }
+
 }

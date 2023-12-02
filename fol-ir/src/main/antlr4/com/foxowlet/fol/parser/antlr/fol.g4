@@ -33,8 +33,6 @@ expression returns[Expression expr]
            | usage_chain {$expr = $usage_chain.expr;}
            | if_expression {$expr = $if_expression.expr;}
            | assignment {$expr = $assignment.expr;}
-           | boolean_expression {$expr = $boolean_expression.expr;}
-           | arithmetic_expression {$expr = $arithmetic_expression.expr;}
            | block {$expr = $block.expr;}
            | lambda {$expr = $lambda.expr;}
            ;
@@ -51,8 +49,9 @@ if_expression returns[If expr]
    {$expr = new If($condition.expr, $thenBranch.expr, $elseBranch.expr); }
    ;
 
-assignment returns[Assignment expr]
-           : assignment_target '=' expression {$expr = new Assignment($assignment_target.expr, $expression.expr);}
+assignment returns[Expression expr]
+           : equals {$expr = $equals.expr;}
+           | assignment_target '=' expression {$expr = new Assignment($assignment_target.expr, $expression.expr);}
            ;
 assignment_target returns[Expression expr]
                   : var_decl {$expr = $var_decl.expr;}
@@ -111,24 +110,23 @@ lambda_call returns[FunctionCall expr]
             : lambda '(' arguments ')' {$expr = new FunctionCall($lambda.expr, $arguments.exprs);}
             ;
 
-boolean_expression returns[Expression expr]
-                   : equals {$expr = $equals.expr;}
-                   ;
-
 equals returns[Expression expr]
-       : arithmetic_expression '==' expression {$expr = new Equals($arithmetic_expression.expr, $expression.expr);}
+       : additive_expression {$expr = $additive_expression.expr;}
+       | e=equals '==' additive_expression {$expr = new Equals($e.expr, $additive_expression.expr);}
        ;
 
-arithmetic_expression returns[Expression expr]
-                      : addition {$expr = $addition.expr; }
-                      | subtraction {$expr = $subtraction.expr; }
-                      | arithmetic_term {$expr = $arithmetic_term.expr;}
-                      ;
-arithmetic_term returns[Expression expr]
-                : multiplication {$expr = $multiplication.expr;}
-                | division {$expr = $division.expr;}
-                | arithmetic_factor {$expr = $arithmetic_factor.expr;}
-                ;
+additive_expression returns[Expression expr]
+                    : multiplicative_expression {$expr = $multiplicative_expression.expr;}
+                    | e=additive_expression '+' multiplicative_expression {$expr = new Addition($e.expr, $multiplicative_expression.expr);}
+                    | e=additive_expression '-' multiplicative_expression {$expr = new Subtraction($e.expr, $multiplicative_expression.expr);}
+                    ;
+
+multiplicative_expression returns[Expression expr]
+                    : arithmetic_factor {$expr = $arithmetic_factor.expr;}
+                    | e=multiplicative_expression '*' arithmetic_factor {$expr = new Multiplication($e.expr, $arithmetic_factor.expr);}
+                    | e=multiplicative_expression '/' arithmetic_factor {$expr = new Division($e.expr, $arithmetic_factor.expr);}
+                    ;
+
 arithmetic_factor returns[Expression expr]
                   : lambda_call {$expr = $lambda_call.expr;}
                   | usage_chain {$expr = $usage_chain.expr;}
@@ -136,22 +134,6 @@ arithmetic_factor returns[Expression expr]
                   | literal {$expr = $literal.expr;}
                   | '(' expression ')' {$expr = $expression.expr;}
                   ;
-
-subtraction returns[Expression expr]
-            : arithmetic_term '-' expression {$expr = new Subtraction($arithmetic_term.expr, $expression.expr);}
-            ;
-
-addition returns[Expression expr]
-         : arithmetic_term '+' expression {$expr = new Addition($arithmetic_term.expr, $expression.expr);}
-         ;
-
-division returns[Expression expr]
-         : arithmetic_factor '/' expression {$expr = new Division($arithmetic_factor.expr, $expression.expr); }
-         ;
-
-multiplication returns[Expression expr]
-         : arithmetic_factor '*' expression {$expr = new Multiplication($arithmetic_factor.expr, $expression.expr);}
-         ;
 
 type returns[Type _type]
      : scalar_type {$_type = $scalar_type._type;}
