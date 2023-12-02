@@ -7,11 +7,11 @@
     <parent>
         <groupId>com.foxowlet</groupId>
         <artifactId>fol-parent</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>fol-emulator</artifactId>
-    <version>0.1.0</version>
+    <version>${fol.emulator.version}</version>
     <description>Computer model: memory, processor, etc.</description>
 
 </project>
