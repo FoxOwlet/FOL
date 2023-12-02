@@ -19,11 +19,70 @@ Representation of the machine operations of the fol-emulator's CPU model.
 - fol-compiler - compiler from FOL to the machine code (fol-emulator commands).
 - fol-lsp - LSP server implementation for the FOL.
 
+## Running FOL
+
+Requires JRE 21+ and FOL interpreter uberjar (`foli.jar`) which might be downloaded 
+from the [releases page](https://github.com/FoxOwlet/FOL/releases) or [built from sources](#building-from-sources).
+
+### From REPL
+
+```shell
+java -jar <path to foli.jar>
+# or, if rlwrap is installed, 
+rlwrap -a java -jar <path to foli.jar>
+```
+```fol
+fol> var i: Int = 21 * 2
+42
+fol> print(i)
+42
+fol> exit
+```
+
+### In the interpreter mode
+```shell
+java -jar <path to foli.jar> <file> [<file>...]
+```
+E.g.
+```shell
+echo 'print(42)' > demo.fol # create a simple FOL program
+java -jar foli.jar demo.fol # interpret it
+```
+
+## Building from sources
+
+Dependencies:
+- JDK 21
+- Apache Maven
+
+To obtain the latest interpreter uberjar (executable jar with all the required dependencies):
+- Clone the repository locally
+  ```shell
+  git clone https://github.com/FoxOwlet/FOL.git
+  ```
+- Switch to the repository directory and run the build
+  ```shell
+  cd FOL
+  mvn clean package -DskipTests
+  ```
+- `foli.jar` should be generated under the `dist/` directory
+
+To run all the tests:
+```shell
+mvn clean test
+```
+
+### Running from IntelliJ IDEA
+
+Make sure that `fol-ir/target/generated-sources/antlr4/` directory is marked as a Generated Sources Root.
+
 ## FOL grammar
 
 See [fol.g4](fol-ir/src/main/antlr4/com/foxowlet/fol/parser/antlr/fol.g4) file for the [ANTLR4](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md) grammar.
 
 ## Syntax example
+
+Note: most features are not supported yet, this is present for the demonstration purpose only.
 
 ```fol
 ns com.foxowlet.demo
