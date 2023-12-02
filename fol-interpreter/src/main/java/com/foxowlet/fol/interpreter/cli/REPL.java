@@ -5,6 +5,7 @@ import com.foxowlet.fol.ast.FunctionCall;
 import com.foxowlet.fol.ast.NodeSeq;
 import com.foxowlet.fol.ast.Symbol;
 import com.foxowlet.fol.interpreter.Interpreter;
+import com.foxowlet.fol.interpreter.exception.InterpreterException;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -36,6 +37,8 @@ public class REPL extends AbstractCLI {
                 session.interpret(new FunctionCall(new Symbol("print"), NodeSeq.of(expr.get())));
             } catch (IOException e) {
                 throw new IllegalStateException(e);
+            } catch (InterpreterException e) {
+                System.err.println("Error: " + e.getMessage());
             }
         }
     }

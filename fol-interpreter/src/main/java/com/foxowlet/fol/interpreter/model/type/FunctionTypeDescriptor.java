@@ -29,7 +29,11 @@ public class FunctionTypeDescriptor implements TypeDescriptor {
 
     @Override
     public String name() {
-        throw new UnsupportedOperationException();
+        String argType = argumentType.name();
+        if (argumentType instanceof FunctionTypeDescriptor) {
+            argType = String.format("(%s)", argType);
+        }
+        return String.format("%s->%s", argType, returnType.name());
     }
 
     @Override

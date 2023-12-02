@@ -21,7 +21,7 @@ public interface TypeDescriptor extends Value {
 
     @Override
     default TypeDescriptor type() {
-        throw new UnsupportedOperationException();
+        return new MetaType(this);
     }
 
     @Override
