@@ -2,7 +2,7 @@ package com.foxowlet.fol.interpreter.model.type;
 
 import java.util.Objects;
 
-public class UnitType implements TypeDescriptor {
+public final class UnitType implements TypeDescriptor {
     private static final String NAME = "Unit";
 
     @Override
@@ -23,6 +23,11 @@ public class UnitType implements TypeDescriptor {
     @Override
     public Object decode(byte[] data) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
     }
 
     @Override

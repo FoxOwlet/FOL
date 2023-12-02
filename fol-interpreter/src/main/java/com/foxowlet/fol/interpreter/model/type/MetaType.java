@@ -1,6 +1,6 @@
 package com.foxowlet.fol.interpreter.model.type;
 
-public class MetaType implements TypeDescriptor {
+public final class MetaType implements TypeDescriptor {
     private final TypeDescriptor type;
 
     public MetaType(TypeDescriptor type) {
@@ -25,6 +25,11 @@ public class MetaType implements TypeDescriptor {
     @Override
     public Object decode(byte[] data) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
     }
 
     @Override

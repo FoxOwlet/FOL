@@ -35,6 +35,11 @@ public final class BooleanType implements TypeDescriptor {
     }
 
     @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         return obj != null && getClass() == obj.getClass();

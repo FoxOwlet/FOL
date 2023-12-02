@@ -47,6 +47,11 @@ public abstract class WholeNumberType<T extends Number> implements TypeDescripto
 
     protected abstract Object getValue(long longVal);
 
+    @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
+    }
+
     // TODO: use singletons at least for predefined types?
     @Override
     public boolean equals(Object object) {

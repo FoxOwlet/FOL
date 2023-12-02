@@ -52,6 +52,11 @@ public class FunctionTypeDescriptor implements TypeDescriptor {
     }
 
     @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;

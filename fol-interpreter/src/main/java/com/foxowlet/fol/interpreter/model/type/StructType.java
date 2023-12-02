@@ -22,6 +22,11 @@ public record StructType(String name, int size, List<Field> fields) implements T
     }
 
     @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
+    }
+
+    @Override
     public Value call(List<Value> actuals, InterpretationContext context) {
         MemoryBlock memoryBlock = context.allocateMemory(size);
         new BiIterator<>(fields, actuals)

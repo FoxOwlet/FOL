@@ -10,9 +10,7 @@ public interface TypeDescriptor extends Value {
     byte[] encode(Object value);
     Object decode(byte[] data);
 
-    default boolean isCompatibleWith(TypeDescriptor other) {
-        return equals(other);
-    }
+    boolean isCompatibleWith(TypeDescriptor other);
 
     @Override
     default Object value() {

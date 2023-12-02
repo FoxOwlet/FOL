@@ -46,6 +46,11 @@ public final class RefType implements TypeDescriptor, Callable {
     }
 
     @Override
+    public boolean isCompatibleWith(TypeDescriptor other) {
+        return equals(other);
+    }
+
+    @Override
     public Value call(List<Value> actuals, InterpretationContext context) {
         Value result = asCallable().call(actuals, context);
         return new Container(result.memory().address(), context.makeRef(result.type()));
