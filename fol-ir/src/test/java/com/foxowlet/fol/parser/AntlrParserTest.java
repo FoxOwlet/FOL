@@ -255,6 +255,45 @@ class AntlrParserTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void shouldParseComplexExpression() {
+        Expression actual = parse(
+                """
+                       a = b = 1 + 2 * (if (c) 3 / 4 / 5 else #(): Int {42}() + 6) + bar.buz()
+                       """);
+
+        File expected = makeFile(
+                new Assignment(
+                        new Symbol("a"),
+                        new Assignment(
+                                new Symbol("b"),
+                                new Addition(
+                                        new Addition(
+                                                new IntLiteral(1),
+                                                new Multiplication(
+                                                        new IntLiteral(2),
+                                                        new If(
+                                                                new Symbol("c"),
+                                                                new Division(
+                                                                        new Division(
+                                                                                new IntLiteral(3),
+                                                                                new IntLiteral(4)),
+                                                                        new IntLiteral(5)),
+                                                                new Addition(
+                                                                        new FunctionCall(
+                                                                                new Lambda(
+                                                                                        NodeSeq.of(),
+                                                                                        new ScalarType(new Symbol("Int")),
+                                                                                        new Block(NodeSeq.of(new IntLiteral(42)))),
+                                                                                NodeSeq.of()),
+                                                                        new IntLiteral(6))))),
+                                        new FunctionCall(
+                                                new FieldAccess(new Symbol("bar"), new Symbol("buz")),
+                                                NodeSeq.of())))));
+
+        assertEquals(expected, actual);
+    }
+
     private Expression parse(String input) {
         try {
             return parser.parse(input).get();

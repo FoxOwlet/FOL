@@ -26,15 +26,7 @@ file returns[File expr]
      ;
 
 expression returns[Expression expr]
-           : var_decl {$expr = $var_decl.expr;}
-           | function_decl {$expr = $function_decl.expr;}
-           | struct_decl {$expr = $struct_decl.expr;}
-           | lambda_call {$expr = $lambda_call.expr;}
-           | usage_chain {$expr = $usage_chain.expr;}
-           | if_expression {$expr = $if_expression.expr;}
-           | assignment {$expr = $assignment.expr;}
-           | block {$expr = $block.expr;}
-           | lambda {$expr = $lambda.expr;}
+           : assignment {$expr = $assignment.expr;}
            ;
 
 var_decl returns[VarDecl expr]
@@ -122,13 +114,21 @@ additive_expression returns[Expression expr]
                     ;
 
 multiplicative_expression returns[Expression expr]
-                    : arithmetic_factor {$expr = $arithmetic_factor.expr;}
-                    | e=multiplicative_expression '*' arithmetic_factor {$expr = new Multiplication($e.expr, $arithmetic_factor.expr);}
-                    | e=multiplicative_expression '/' arithmetic_factor {$expr = new Division($e.expr, $arithmetic_factor.expr);}
+                    : primary {$expr = $primary.expr;}
+                    | e=multiplicative_expression '*' primary {$expr = new Multiplication($e.expr, $primary.expr);}
+                    | e=multiplicative_expression '/' primary {$expr = new Division($e.expr, $primary.expr);}
                     ;
 
-arithmetic_factor returns[Expression expr]
-                  : lambda_call {$expr = $lambda_call.expr;}
+primary returns[Expression expr]
+                  : var_decl {$expr = $var_decl.expr;}
+                  | function_decl {$expr = $function_decl.expr;}
+                  | struct_decl {$expr = $struct_decl.expr;}
+                  | lambda_call {$expr = $lambda_call.expr;}
+                  | usage_chain {$expr = $usage_chain.expr;}
+                  | if_expression {$expr = $if_expression.expr;}
+                  | block {$expr = $block.expr;}
+                  | lambda {$expr = $lambda.expr;}
+                  | lambda_call {$expr = $lambda_call.expr;}
                   | usage_chain {$expr = $usage_chain.expr;}
                   | symbol {$expr = $symbol.expr;}
                   | literal {$expr = $literal.expr;}
