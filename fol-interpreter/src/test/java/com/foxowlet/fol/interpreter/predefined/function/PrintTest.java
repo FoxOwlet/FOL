@@ -1,4 +1,4 @@
-package com.foxowlet.fol.interpreter.expression;
+package com.foxowlet.fol.interpreter.predefined.function;
 
 import com.foxowlet.fol.ast.Assignment;
 import com.foxowlet.fol.ast.Block;
@@ -18,7 +18,7 @@ import static com.foxowlet.fol.interpreter.AstUtils.*;
 import static com.foxowlet.fol.interpreter.assertion.AssertionUtils.assertFunction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PredefinedFunctionTest extends AbstractInterpreterTest {
+class PrintTest extends AbstractInterpreterTest {
     private PrintStream oldStream;
     private ByteArrayOutputStream stream;
 
