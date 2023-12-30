@@ -3,6 +3,7 @@ package com.foxowlet.fol.interpreter.assertion;
 import com.foxowlet.fol.interpreter.model.Function;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.type.RefType;
+import com.foxowlet.fol.interpreter.model.type.StringType;
 import com.foxowlet.fol.interpreter.model.type.StructType;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -30,6 +31,13 @@ public final class AssertionUtils {
         byte[] struct = assertInstanceOf(byte[].class, value.deref());
         StructType type = assertInstanceOf(StructType.class, refType.pointedType());
         return new StructAssertion(struct, type);
+    }
+
+    public static StringAssertion assertString(Object actual) {
+        Value value = asValue(actual);
+        StringType stringType = assertInstanceOf(StringType.class, value.type());
+        String string = stringType.deref(value.value());
+        return new StringAssertion(string);
     }
 
     private static Value asValue(Object actual) {

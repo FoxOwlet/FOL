@@ -8,6 +8,7 @@ import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 import com.foxowlet.fol.interpreter.model.type.RefType;
+import com.foxowlet.fol.interpreter.model.type.StringType;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 import com.foxowlet.fol.interpreter.scope.LookupScope;
 
@@ -28,6 +29,7 @@ public class Interpreter {
                 new IntLiteralInterpreter(),
                 new ByteLiteralInterpreter(),
                 new LongLiteralInterpreter(),
+                new StringLiteralInterpreter(),
                 new AdditionInterpreter(),
                 new SubtractionInterpreter(),
                 new MultiplicationInterpreter(),
@@ -128,6 +130,11 @@ public class Interpreter {
         @Override
         public RefType makeRef(TypeDescriptor type) {
             return new RefType(memory, type);
+        }
+
+        @Override
+        public StringType makeString() {
+            return new StringType(memory);
         }
     }
 

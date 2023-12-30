@@ -101,6 +101,7 @@ public final class AstUtils {
             case Integer i -> new IntLiteral(i);
             case Long l -> new LongLiteral(l);
             case Byte b -> new ByteLiteral(b);
+            case String s -> new StringLiteral(s);
             default -> throw new IllegalArgumentException("Can't create literal for " + value);
         };
     }

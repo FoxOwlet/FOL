@@ -11,6 +11,7 @@ public class PredefinedPreprocessor implements ContextPreprocessor {
     public PredefinedPreprocessor() {
         processors = List.of(
                 new PredefinedTypes(),
+                new PredefinedStringType(),
                 new PredefinedFunctions()
         );
     }
