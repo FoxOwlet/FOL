@@ -33,14 +33,14 @@ public final class AssertionUtils {
         return new StructAssertion(struct, type);
     }
 
-    private static Value asValue(Object actual) {
-        return assertInstanceOf(Value.class, actual);
-    }
-
     public static StringAssertion assertString(Object actual) {
         Value value = asValue(actual);
         StringType stringType = assertInstanceOf(StringType.class, value.type());
         String string = stringType.deref(value.value());
         return new StringAssertion(string);
+    }
+
+    private static Value asValue(Object actual) {
+        return assertInstanceOf(Value.class, actual);
     }
 }
