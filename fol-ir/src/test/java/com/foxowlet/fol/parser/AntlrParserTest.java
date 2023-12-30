@@ -256,6 +256,15 @@ class AntlrParserTest {
     }
 
     @Test
+    void shouldParseStringLiteral() {
+        Expression actual = parse("\"abc\"");
+
+        File expected = makeFile(new StringLiteral("abc"));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void shouldParseComplexExpression() {
         Expression actual = parse(
                 """

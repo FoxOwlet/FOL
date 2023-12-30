@@ -6,6 +6,7 @@ import com.foxowlet.fol.interpreter.internal.ReflectionUtils;
 import com.foxowlet.fol.interpreter.model.Value;
 import com.foxowlet.fol.interpreter.model.memory.MemoryBlock;
 import com.foxowlet.fol.interpreter.model.type.RefType;
+import com.foxowlet.fol.interpreter.model.type.StringType;
 import com.foxowlet.fol.interpreter.model.type.TypeDescriptor;
 
 public interface InterpretationContext {
@@ -32,4 +33,6 @@ public interface InterpretationContext {
     int allocateFunction();
 
     RefType makeRef(TypeDescriptor type);
+
+    StringType makeString();
 }

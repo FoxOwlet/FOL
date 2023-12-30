@@ -8,7 +8,7 @@ import com.foxowlet.fol.interpreter.predefined.function.Print;
 import java.util.List;
 import java.util.function.Function;
 
-public class PredefinedFunctions implements ContextPreprocessor {
+final class PredefinedFunctions implements ContextPreprocessor {
     private final List<Function<InterpretationContext, PredefinedFunction>> functions;
 
     public PredefinedFunctions() {

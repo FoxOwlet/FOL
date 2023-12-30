@@ -6,7 +6,7 @@ import com.foxowlet.fol.interpreter.model.type.*;
 
 import java.util.List;
 
-public class PredefinedTypes implements ContextPreprocessor {
+final class PredefinedTypes implements ContextPreprocessor {
     private final List<TypeDescriptor> predefinedTypes;
 
     public PredefinedTypes() {

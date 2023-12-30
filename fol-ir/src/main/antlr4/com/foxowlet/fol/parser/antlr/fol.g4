@@ -19,6 +19,10 @@ private <T> Expression reduceUsage(Expression base, List<T> ctxs, Function<T, Fu
 private String num(String input) {
     return input.replaceAll("[_lLbB]", "");
 }
+
+private String str(String input) {
+    return input.substring(1, input.length() - 1);
+}
 }
 
 file returns[File expr]
@@ -157,12 +161,14 @@ literal returns[Literal expr]
         : INT {$expr = new IntLiteral(Integer.parseInt(num($INT.text)));}
         | LONG {$expr = new LongLiteral(Long.parseLong(num($LONG.text)));}
         | BYTE {$expr = new ByteLiteral(Byte.parseByte(num($BYTE.text)));}
+        | STRING {$expr = new StringLiteral(str($STRING.text));}
         ;
 
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 INT : [0-9][0-9_]*;
 LONG : [0-9][0-9_]*[lL];
 BYTE : [0-9][0-9_]*[bB];
+STRING : '"' ~["\r\n]* '"';
 
 WHITESPACE : [ \t\r\n]+ -> skip;
 COMMENT : ('//' | ';') ~[\r\n]* -> channel(HIDDEN);
